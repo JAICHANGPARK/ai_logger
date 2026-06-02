@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026.6.3
+
+- Bumped package version for pub.dev publishing after runtime diagnostic,
+  recent signal filtering, and README metadata updates.
+
 ## 2026.6.2
 
 - Added `recentEventsWhere(levels: ...)` and `Options.recentSignalLevels` for

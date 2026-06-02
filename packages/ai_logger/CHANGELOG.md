@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026.6.3
+
+- Bumped package version for pub.dev publishing after runtime diagnostic,
+  recent signal filtering, and README metadata updates.
+- Updated the `ai_logger_core` dependency constraint to `^2026.6.3`.
+
 ## 2026.6.2
 
 - Re-exported level-filtered recent event queries and configurable recent signal

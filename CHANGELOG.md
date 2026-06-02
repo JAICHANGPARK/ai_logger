@@ -2,6 +2,12 @@
 
 ## 2026-06-02
 
+### Version bump for publish
+
+- Bumped `ai_logger_core` and `ai_logger` package versions to `2026.6.3`.
+- Bumped the example app version to `2026.6.3+2`.
+- Updated `ai_logger` to depend on `ai_logger_core: ^2026.6.3`.
+
 ### Pub.dev documentation and metadata
 
 - Expanded root and package READMEs with installation, quick start,

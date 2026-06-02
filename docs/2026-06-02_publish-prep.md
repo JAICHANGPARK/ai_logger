@@ -20,3 +20,9 @@
 - `ai_logger` dry-run은 패키지 archive 구성까지 확인했다.
 - 두 dry-run 모두 현재 worktree가 아직 커밋 전이라 git clean 경고가 있었다.
 - `ai_logger` dry-run에는 local `pubspec_overrides.yaml` 힌트가 있었다. 실제 publish 시에는 core를 먼저 publish하고 override 없이 진행해야 한다.
+
+## 후속 버전
+
+- 2026-06-02 후속 작업에서 publish 대상 패키지 버전을 `2026.6.3`으로 올렸다.
+- 현재 publish 순서는 `ai_logger_core 2026.6.3`을 먼저 publish한 뒤, `ai_logger 2026.6.3`을 publish하는 것이다.
+- 자세한 변경은 `docs/2026-06-02_version-bump-2026-6-3.md`를 참고한다.
