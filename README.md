@@ -17,6 +17,35 @@ The goal is to turn noisy runtime output into useful debugging context:
 Dart-only projects can use `ai_logger_core`; Flutter apps use `ai_logger`,
 which re-exports the core API and installs Flutter-specific hooks.
 
+Code examples use Dart dot shorthand, such as `captureLevel: .debug`, when the
+expected type is already clear. The packages require Dart `^3.12.0`.
+
+## AI Agent Skill
+
+This repository includes a Codex skill at [`skills/ai-logger`](skills/ai-logger)
+so an AI agent can quickly understand how to install, configure, analyze, and
+extend `ai_logger`.
+
+Give that skill to Codex when you want an agent to:
+
+- add `ai_logger` to a Flutter app or `ai_logger_core` to a Dart project
+- explain `captureLevel`, `reportLevel`, report formats, and recent signals
+- convert runtime logs or analyzer output into AI-readable reports
+- review an integration for missing hooks, context, persistence, or tests
+
+To install it locally for Codex discovery, copy the skill folder into your
+skills directory:
+
+```bash
+cp -R skills/ai-logger "${CODEX_HOME:-$HOME/.codex}/skills/"
+```
+
+Then prompt the agent with:
+
+```text
+Use $ai-logger to add AI-friendly logging to this Flutter or Dart project.
+```
+
 ## Installation
 
 For Flutter apps:
@@ -55,8 +84,8 @@ void main() {
   ailog.runApp(
     const MyApp(),
     options: const ailog.Options(
-      captureLevel: ailog.Level.debug,
-      reportLevel: ailog.Level.warning,
+      captureLevel: .debug,
+      reportLevel: .warning,
     ),
   );
 }
@@ -76,7 +105,7 @@ void main() {
 Generate a copyable AI report from the most recent warning/error/fatal event:
 
 ```dart
-final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
+final markdown = ailog.formatLastReport(.markdown);
 ```
 
 By default, warning/error/fatal runtime events also print a Rust-style
@@ -149,8 +178,8 @@ automatic AI-readable report.
 
 ```dart
 options: const ailog.Options(
-  captureLevel: ailog.Level.debug,
-  reportLevel: ailog.Level.warning,
+  captureLevel: .debug,
+  reportLevel: .warning,
 )
 ```
 
@@ -168,9 +197,9 @@ To retrieve only specific captured levels, pass the levels you want:
 ```dart
 final selected = ailog.recentEventsWhere(
   levels: const [
-    ailog.Level.trace,
-    ailog.Level.debug,
-    ailog.Level.error,
+    .trace,
+    .debug,
+    .error,
   ],
 );
 ```
@@ -183,14 +212,14 @@ If you want `trace` events to appear here, `captureLevel` must be
 ```dart
 ailog.configure(
   options: const ailog.Options(
-    captureLevel: ailog.Level.debug,
-    reportLevel: ailog.Level.warning,
+    captureLevel: .debug,
+    reportLevel: .warning,
     recentSignalLevels: [
-      ailog.Level.debug,
-      ailog.Level.info,
-      ailog.Level.error,
+      .debug,
+      .info,
+      .error,
     ],
-    reportFormat: ailog.ReportFormat.diagnostic,
+    reportFormat: .diagnostic,
   ),
 );
 ```
@@ -218,8 +247,8 @@ error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.
 ```dart
 ailog.configure(
   options: const ailog.Options(
-    captureLevel: ailog.Level.info,
-    reportLevel: ailog.Level.error,
+    captureLevel: .info,
+    reportLevel: .error,
     printReports: false,
   ),
 );
@@ -227,7 +256,7 @@ ailog.configure(
 ailog.i('loaded profile');
 ailog.e('request failed', error: error, stackTrace: stackTrace);
 
-final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
+final markdown = ailog.formatLastReport(.markdown);
 ```
 
 With this configuration, events are captured but not printed automatically.

@@ -169,7 +169,7 @@ void _report(List<String> args) {
 
 LogEvent _lastReportable(List<LogEvent> events) {
   for (final event in events.reversed) {
-    if (event.level.index >= Level.error.index) {
+    if (Level.warning.allows(event.level)) {
       return event;
     }
   }

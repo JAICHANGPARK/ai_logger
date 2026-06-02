@@ -85,7 +85,7 @@ class LogEvent {
       timestamp:
           DateTime.tryParse(json['t']?.toString() ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0),
-      level: Level.parse(json['lv']),
+      level: .parse(json['lv']),
       source: json['src']?.toString() ?? 'app',
       message: json['msg']?.toString() ?? '',
       kind: json['kind']?.toString(),

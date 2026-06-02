@@ -46,39 +46,39 @@ class AiLoggerOutput extends logger_pkg.LogOutput {
 
 Level _fromLoggingLevel(logging_pkg.Level level) {
   if (level >= logging_pkg.Level.SHOUT) {
-    return Level.fatal;
+    return .fatal;
   }
   if (level >= logging_pkg.Level.SEVERE) {
-    return Level.error;
+    return .error;
   }
   if (level >= logging_pkg.Level.WARNING) {
-    return Level.warning;
+    return .warning;
   }
   if (level >= logging_pkg.Level.INFO) {
-    return Level.info;
+    return .info;
   }
   if (level >= logging_pkg.Level.FINE) {
-    return Level.debug;
+    return .debug;
   }
-  return Level.trace;
+  return .trace;
 }
 
 Level _fromLoggerLevel(logger_pkg.Level level) {
   final value = level.value;
   if (value >= logger_pkg.Level.fatal.value) {
-    return Level.fatal;
+    return .fatal;
   }
   if (value >= logger_pkg.Level.error.value) {
-    return Level.error;
+    return .error;
   }
   if (value >= logger_pkg.Level.warning.value) {
-    return Level.warning;
+    return .warning;
   }
   if (value >= logger_pkg.Level.info.value) {
-    return Level.info;
+    return .info;
   }
   if (value >= logger_pkg.Level.debug.value) {
-    return Level.debug;
+    return .debug;
   }
-  return Level.trace;
+  return .trace;
 }

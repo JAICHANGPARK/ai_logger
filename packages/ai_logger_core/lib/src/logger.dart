@@ -153,7 +153,10 @@ class AiLogger {
 
   void _remember(LogEvent event) {
     _recent.add(event);
-    final maxEvents = _options.recentSignalLimit * 4;
+    final recentSignalLimit = _options.recentSignalLimit < 0
+        ? 0
+        : _options.recentSignalLimit;
+    final maxEvents = recentSignalLimit == 0 ? 1 : recentSignalLimit * 4;
     while (_recent.length > maxEvents) {
       _recent.removeFirst();
     }
@@ -191,15 +194,15 @@ List<LogEvent> recentEventsWhere({Iterable<Level>? levels}) {
 }
 
 LogEvent? t(Object message, {String source = 'app'}) {
-  return logger.log(Level.trace, message, source: source);
+  return logger.log(.trace, message, source: source);
 }
 
 LogEvent? d(Object message, {String source = 'app'}) {
-  return logger.log(Level.debug, message, source: source);
+  return logger.log(.debug, message, source: source);
 }
 
 LogEvent? i(Object message, {String source = 'app'}) {
-  return logger.log(Level.info, message, source: source);
+  return logger.log(.info, message, source: source);
 }
 
 LogEvent? w(
@@ -209,7 +212,7 @@ LogEvent? w(
   String source = 'app',
 }) {
   return logger.log(
-    Level.warning,
+    .warning,
     message,
     error: error,
     stackTrace: stackTrace,
@@ -224,7 +227,7 @@ LogEvent? e(
   String source = 'app',
 }) {
   return logger.log(
-    Level.error,
+    .error,
     message,
     error: error,
     stackTrace: stackTrace,
@@ -239,7 +242,7 @@ LogEvent? f(
   String source = 'app',
 }) {
   return logger.log(
-    Level.fatal,
+    .fatal,
     message,
     error: error,
     stackTrace: stackTrace,

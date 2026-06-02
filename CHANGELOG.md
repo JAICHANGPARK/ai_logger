@@ -2,6 +2,18 @@
 
 ## 2026-06-02
 
+### Review hardening and example refresh
+
+- Preserved parent-zone `print()` output while still capturing guarded prints as
+  log events.
+- Fixed report generation when `recentSignalLimit` is zero so the current
+  reportable event remains available without recent context.
+- Aligned CLI `report --last` selection with warning/error/fatal reportable
+  events.
+- Refreshed the Flutter example with warning events and Markdown/diagnostic/JSON
+  report format selection.
+- Applied Dart dot shorthand syntax where the static type context is clear.
+
 ### Version bump for publish
 
 - Bumped `ai_logger_core` and `ai_logger` package versions to `2026.6.3`.

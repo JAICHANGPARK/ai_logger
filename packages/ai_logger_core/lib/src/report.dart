@@ -11,9 +11,9 @@ enum ReportFormat {
 
   static ReportFormat parse(String? value) {
     return switch (value) {
-      'json' || 'compact-json' || 'compactJson' => ReportFormat.compactJson,
-      'diagnostic' => ReportFormat.diagnostic,
-      _ => ReportFormat.markdown,
+      'json' || 'compact-json' || 'compactJson' => .compactJson,
+      'diagnostic' => .diagnostic,
+      _ => .markdown,
     };
   }
 }
@@ -113,9 +113,9 @@ class AiReport {
 
   String format(ReportFormat format, {SourceLoader? sourceLoader}) {
     return switch (format) {
-      ReportFormat.markdown => toMarkdown(sourceLoader: sourceLoader),
-      ReportFormat.compactJson => toCompactJsonString(),
-      ReportFormat.diagnostic => toDiagnostic(sourceLoader: sourceLoader),
+      .markdown => toMarkdown(sourceLoader: sourceLoader),
+      .compactJson => toCompactJsonString(),
+      .diagnostic => toDiagnostic(sourceLoader: sourceLoader),
     };
   }
 }
@@ -127,6 +127,7 @@ class ReportGenerator {
   final Iterable<Level>? recentSignalLevels;
 
   AiReport build(LogEvent event, Iterable<LogEvent> allEvents) {
+    final signalLimit = recentSignalLimit < 0 ? 0 : recentSignalLimit;
     final recent = <LogEvent>[];
     for (final candidate in allEvents) {
       if (identical(candidate, event)) {
@@ -136,9 +137,11 @@ class ReportGenerator {
         recent.add(candidate);
       }
     }
-    final signals = recent.length <= recentSignalLimit
+    final signals = signalLimit == 0
+        ? const <LogEvent>[]
+        : recent.length <= signalLimit
         ? recent
-        : recent.sublist(recent.length - recentSignalLimit);
+        : recent.sublist(recent.length - signalLimit);
     return AiReport(event: event, recentSignals: signals);
   }
 
@@ -150,6 +153,6 @@ class ReportGenerator {
     if (event.level.index >= Level.warning.index) {
       return true;
     }
-    return event.level == Level.debug || event.level == Level.info;
+    return event.level == .debug || event.level == .info;
   }
 }

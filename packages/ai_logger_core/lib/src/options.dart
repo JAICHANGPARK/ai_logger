@@ -5,13 +5,13 @@ import 'report.dart';
 
 class Options {
   const Options({
-    this.captureLevel = Level.info,
-    this.reportLevel = Level.warning,
+    this.captureLevel = .info,
+    this.reportLevel = .warning,
     this.recentSignalLimit = 20,
     this.recentSignalLevels,
     this.capturePrint = true,
     this.printReports = true,
-    this.reportFormat = ReportFormat.diagnostic,
+    this.reportFormat = .diagnostic,
     this.reportWriter,
     this.reportSourceLoader,
     this.redactionRules,
@@ -25,7 +25,7 @@ class Options {
 
   /// Lowest captured event level that should trigger an AI-readable report.
   ///
-  /// For example, `captureLevel: Level.debug` and `reportLevel: Level.warning`
+  /// For example, `captureLevel: .debug` and `reportLevel: .warning`
   /// stores debug/info/warning/error/fatal events, but only warning/error/fatal
   /// events automatically print reports.
   final Level reportLevel;
@@ -37,7 +37,7 @@ class Options {
   ///
   /// Leave this unset to include the default useful signals: debug, info,
   /// warning, error, and fatal. Set it to values such as
-  /// `[Level.trace, Level.debug, Level.error]` when reports should include only
+  /// `[.trace, .debug, .error]` when reports should include only
   /// those levels.
   final List<Level>? recentSignalLevels;
 

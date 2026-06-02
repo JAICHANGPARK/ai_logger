@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,15 +11,12 @@ void main() {
   test('captures only events at or above the configured level', () {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.warning,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .warning, printReports: false),
       sinks: [sink],
     );
 
-    logger.log(ailog.Level.info, 'hidden');
-    logger.log(ailog.Level.error, 'visible');
+    logger.log(.info, 'hidden');
+    logger.log(.error, 'visible');
 
     expect(sink.events, hasLength(1));
     expect(sink.events.single.message, 'visible');
@@ -26,23 +24,18 @@ void main() {
 
   test('returns recent events matching explicit levels', () {
     final logger = ailog.AiLogger(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .trace, printReports: false),
     );
 
-    logger.log(ailog.Level.trace, 'trace detail');
-    logger.log(ailog.Level.debug, 'debug state');
-    logger.log(ailog.Level.info, 'loaded profile');
-    logger.log(ailog.Level.error, 'request failed');
+    logger.log(.trace, 'trace detail');
+    logger.log(.debug, 'debug state');
+    logger.log(.info, 'loaded profile');
+    logger.log(.error, 'request failed');
 
     final selected = logger.recentEventsWhere(
-      levels: const [ailog.Level.trace, ailog.Level.debug, ailog.Level.error],
+      levels: const [.trace, .debug, .error],
     );
-    final jsonLines = logger.exportRecentJsonLines(
-      levels: const [ailog.Level.error],
-    );
+    final jsonLines = logger.exportRecentJsonLines(levels: const [.error]);
 
     expect(selected.map((event) => event.message), [
       'trace detail',
@@ -57,23 +50,19 @@ void main() {
   test('uses configured recent signal levels in reports', () {
     final logger = ailog.AiLogger(
       options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        reportLevel: ailog.Level.error,
-        recentSignalLevels: [
-          ailog.Level.trace,
-          ailog.Level.debug,
-          ailog.Level.error,
-        ],
+        captureLevel: .trace,
+        reportLevel: .error,
+        recentSignalLevels: [.trace, .debug, .error],
         printReports: false,
       ),
     );
 
-    logger.log(ailog.Level.trace, 'trace detail');
-    logger.log(ailog.Level.debug, 'debug state');
-    logger.log(ailog.Level.info, 'loaded profile');
-    logger.log(ailog.Level.error, 'request failed');
+    logger.log(.trace, 'trace detail');
+    logger.log(.debug, 'debug state');
+    logger.log(.info, 'loaded profile');
+    logger.log(.error, 'request failed');
 
-    final markdown = logger.formatLastReport(ailog.ReportFormat.markdown);
+    final markdown = logger.formatLastReport(.markdown);
 
     expect(markdown, contains('trace detail'));
     expect(markdown, contains('debug state'));
@@ -90,7 +79,7 @@ void main() {
     logger.context.setRoute('/login');
 
     final event = logger.log(
-      ailog.Level.error,
+      .error,
       'token=abc123 failed for user@example.com',
       error: StateError('apiKey=secret'),
       kind: 'login_error',
@@ -131,13 +120,13 @@ void main() {
   test('generates AI-friendly markdown with recent signals', () {
     final info = ailog.LogEvent(
       timestamp: DateTime(2026, 6, 2, 10),
-      level: ailog.Level.info,
+      level: .info,
       message: 'loaded profile',
       context: const {'route': '/profile'},
     );
     final error = ailog.LogEvent(
       timestamp: DateTime(2026, 6, 2, 10, 1),
-      level: ailog.Level.error,
+      level: .error,
       source: 'flutter',
       message: 'RenderFlex overflowed by 42px',
       kind: 'render_flex_overflow',
@@ -164,7 +153,7 @@ void main() {
   test('renders Rust-style source diagnostics when source is available', () {
     final event = ailog.LogEvent(
       timestamp: DateTime(2026, 6, 2),
-      level: ailog.Level.error,
+      level: .error,
       message: 'Row overflowed by 42px on the right',
       kind: 'render_flex_overflow',
       file: 'lib/profile_header.dart',
@@ -195,8 +184,8 @@ return Row(
     final reports = <String>[];
     final logger = ailog.AiLogger(
       options: ailog.Options(
-        captureLevel: ailog.Level.debug,
-        reportLevel: ailog.Level.warning,
+        captureLevel: .debug,
+        reportLevel: .warning,
         reportWriter: reports.add,
         reportSourceLoader: (_) => '''
 return Row(
@@ -208,9 +197,9 @@ return Row(
       ),
     );
 
-    logger.log(ailog.Level.info, 'loaded profile');
+    logger.log(.info, 'loaded profile');
     logger.log(
-      ailog.Level.error,
+      .error,
       'RenderFlex overflowed by 42 pixels.',
       kind: 'render_flex_overflow',
       file: 'lib/profile_header.dart',
@@ -231,26 +220,50 @@ return Row(
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(sinks: [sink]);
 
-    ailog.guard<void>(() {
-      print('server started');
-    }, target: logger);
+    runZoned(() {
+      ailog.guard<void>(() {
+        print('server started');
+      }, target: logger);
+    }, zoneSpecification: ZoneSpecification(print: (_, __, ___, _) {}));
 
     expect(sink.events, hasLength(1));
     expect(sink.events.single.source, 'print');
     expect(sink.events.single.message, 'server started');
   });
 
-  test('builds a last report from recent logger events', () {
+  test('guard preserves parent zone print output while capturing it', () {
+    final sink = ailog.MemorySink();
+    final printed = <String>[];
     final logger = ailog.AiLogger(
-      options: const ailog.Options(
-        reportLevel: ailog.Level.warning,
-        printReports: false,
+      options: const ailog.Options(printReports: false),
+      sinks: [sink],
+    );
+
+    runZoned(
+      () {
+        ailog.guard<void>(() {
+          print('server started');
+        }, target: logger);
+      },
+      zoneSpecification: ZoneSpecification(
+        print: (_, __, ___, line) {
+          printed.add(line);
+        },
       ),
     );
 
-    logger.log(ailog.Level.info, 'loaded profile');
+    expect(sink.events.single.message, 'server started');
+    expect(printed, ['server started']);
+  });
+
+  test('builds a last report from recent logger events', () {
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(reportLevel: .warning, printReports: false),
+    );
+
+    logger.log(.info, 'loaded profile');
     logger.log(
-      ailog.Level.error,
+      .error,
       'RenderFlex overflowed by 42px',
       kind: 'render_flex_overflow',
       file: 'lib/profile.dart',
@@ -259,12 +272,29 @@ return Row(
       suggestedFix: 'Wrap it with Expanded.',
     );
 
-    final markdown = logger.formatLastReport(ailog.ReportFormat.markdown);
+    final markdown = logger.formatLastReport(.markdown);
 
     expect(markdown, isNotNull);
     expect(markdown, contains('# Runtime Event'));
     expect(markdown, contains('Kind: render_flex_overflow'));
     expect(markdown, contains('# Suggested Fix'));
+  });
+
+  test('keeps the current event when recentSignalLimit is zero', () {
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(recentSignalLimit: 0, printReports: false),
+    );
+
+    logger.log(.info, 'loaded profile');
+    logger.log(.error, 'request failed', kind: 'network_error');
+
+    final markdown = logger.formatLastReport(.markdown);
+
+    expect(markdown, isNotNull);
+    expect(markdown, contains('request failed'));
+    expect(markdown, contains('Kind: network_error'));
+    expect(markdown, isNot(contains('# Recent Signals')));
+    expect(logger.recentEvents, hasLength(1));
   });
 
   test('persists and reads JSONL events from a file sink', () {
@@ -280,8 +310,8 @@ return Row(
       sinks: [sink],
     );
 
-    logger.log(ailog.Level.warning, 'warning for AI report');
-    logger.log(ailog.Level.error, 'error for AI report', kind: 'example_error');
+    logger.log(.warning, 'warning for AI report');
+    logger.log(.error, 'error for AI report', kind: 'example_error');
 
     final events = sink.readEvents();
 
@@ -292,10 +322,7 @@ return Row(
   test('captures package:logging records', () async {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .trace, printReports: false),
       sinks: [sink],
     );
     final subscription = ailog.captureLoggingPackage(target: logger);
@@ -317,10 +344,7 @@ return Row(
   test('captures package:logger output', () async {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .trace, printReports: false),
       sinks: [sink],
     );
     final packageLogger = logger_pkg.Logger(
@@ -380,4 +404,48 @@ void main() {
     expect(diagnostic, contains('^ undefined_identifier'));
     expect(diagnostic, contains('help: Try correcting'));
   });
+
+  test(
+    'CLI report --last selects the latest warning-or-higher event',
+    () async {
+      final directory = Directory.systemTemp.createTempSync('ai_logger_cli_');
+      addTearDown(() {
+        if (directory.existsSync()) {
+          directory.deleteSync(recursive: true);
+        }
+      });
+      final file = File('${directory.path}/events.jsonl');
+      final error = ailog.LogEvent(
+        timestamp: DateTime(2026, 6, 2, 10),
+        level: .error,
+        message: 'older error',
+        kind: 'older_error',
+      );
+      final warning = ailog.LogEvent(
+        timestamp: DateTime(2026, 6, 2, 10, 1),
+        level: .warning,
+        message: 'newer warning',
+        kind: 'newer_warning',
+      );
+      file.writeAsStringSync(
+        [error, warning].map((event) => jsonEncode(event.toJson())).join('\n'),
+      );
+
+      final result = await Process.run(Platform.resolvedExecutable, [
+        'bin/ai_logger_core.dart',
+        'report',
+        '--last',
+        '--file',
+        file.path,
+        '--format',
+        'diagnostic',
+        '--project',
+        directory.path,
+      ], workingDirectory: Directory.current.path);
+
+      expect(result.exitCode, 0, reason: result.stderr.toString());
+      expect(result.stdout.toString(), contains('warning[newer_warning]'));
+      expect(result.stdout.toString(), isNot(contains('error[older_error]')));
+    },
+  );
 }

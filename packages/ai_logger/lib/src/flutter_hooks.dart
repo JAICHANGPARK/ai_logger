@@ -43,7 +43,7 @@ void installFlutterHooks({
   _previousPlatformError = ui.PlatformDispatcher.instance.onError;
   ui.PlatformDispatcher.instance.onError = (error, stackTrace) {
     core.logger.log(
-      core.Level.fatal,
+      .fatal,
       error,
       error: error,
       stackTrace: stackTrace,
@@ -61,7 +61,7 @@ void installFlutterHooks({
   _previousDebugPrint = debugPrint;
   debugPrint = (message, {wrapWidth}) {
     if (message != null) {
-      core.logger.log(core.Level.debug, message, source: 'debugPrint');
+      core.logger.log(.debug, message, source: 'debugPrint');
     }
     _previousDebugPrint?.call(message, wrapWidth: wrapWidth);
   };

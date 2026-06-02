@@ -7,10 +7,7 @@ void main() {
   setUp(() {
     memorySink.clear();
     ailog.configure(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .trace, printReports: false),
       sinks: [memorySink],
     );
   });
@@ -32,10 +29,7 @@ void main() {
 
   testWidgets('shows captured debugPrint logs', (tester) async {
     ailog.installFlutterHooks(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.trace,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .trace, printReports: false),
       sinks: [memorySink],
     );
     await tester.pumpWidget(const AiLoggerExampleApp());
@@ -58,10 +52,7 @@ void main() {
       ),
     );
     expect(memorySink.events.last.kind, 'render_flex_overflow');
-    expect(
-      ailog.formatLastReport(ailog.ReportFormat.markdown),
-      contains('# Flutter Error'),
-    );
+    expect(ailog.formatLastReport(.markdown), contains('# Flutter Error'));
 
     await tester.tap(find.text('copy AI report'));
     await tester.pumpAndSettle();
@@ -72,7 +63,48 @@ void main() {
             widget is SelectableText &&
             (widget.data?.contains('# Flutter Error') ?? false) &&
             (widget.data?.contains('Kind: render_flex_overflow') ?? false) &&
-            (widget.data?.contains('# Suggested Fix') ?? false),
+            (widget.data?.contains('# Suggested Fix') ?? false) &&
+            (widget.data?.contains('# Diagnostic') ?? false),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('copies diagnostic and JSON report formats', (tester) async {
+    await tester.pumpWidget(const AiLoggerExampleApp());
+
+    ailog.logClassifiedFlutterError(
+      FlutterError('RenderFlex overflowed by 42 pixels.'),
+      stackTrace: StackTrace.fromString(
+        '#0      LogConsolePage.build '
+        '(package:ai_logger_example/main.dart:88:12)',
+      ),
+    );
+
+    await tester.tap(find.text('Diagnostic'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('copy AI report'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SelectableText &&
+            (widget.data?.contains('error[render_flex_overflow]') ?? false),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text('JSON'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('copy AI report'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SelectableText &&
+            (widget.data?.contains('"kind": "render_flex_overflow"') ?? false),
       ),
       findsOneWidget,
     );

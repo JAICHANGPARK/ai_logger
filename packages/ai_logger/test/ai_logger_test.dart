@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ai_logger/ai_logger.dart' as ailog;
 import 'package:ai_logger/src/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
@@ -43,10 +45,7 @@ void main() {
     };
 
     ailog.installFlutterHooks(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.debug,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .debug, printReports: false),
       sinks: [sink],
     );
     FlutterError.reportError(
@@ -68,10 +67,7 @@ void main() {
     final sink = ailog.MemorySink();
 
     ailog.installFlutterHooks(
-      options: const ailog.Options(
-        captureLevel: ailog.Level.debug,
-        printReports: false,
-      ),
+      options: const ailog.Options(captureLevel: .debug, printReports: false),
       sinks: [sink],
     );
     debugPrint('loaded user profile');
@@ -84,16 +80,15 @@ void main() {
   test('runGuarded captures print logs in the app zone', () {
     final sink = ailog.MemorySink();
 
-    ailog.runGuarded<void>(
-      () {
-        print('zone print from app');
-      },
-      options: const ailog.Options(
-        captureLevel: ailog.Level.debug,
-        printReports: false,
-      ),
-      sinks: [sink],
-    );
+    runZoned(() {
+      ailog.runGuarded<void>(
+        () {
+          print('zone print from app');
+        },
+        options: const ailog.Options(captureLevel: .debug, printReports: false),
+        sinks: [sink],
+      );
+    }, zoneSpecification: ZoneSpecification(print: (_, __, ___, _) {}));
 
     expect(sink.events, hasLength(1));
     expect(sink.events.single.level, ailog.Level.info);

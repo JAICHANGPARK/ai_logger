@@ -8,7 +8,7 @@ final routeObserver = ailog.AiLoggerRouteObserver();
 void main() {
   ailog.runApp(
     const AiLoggerExampleApp(),
-    options: const ailog.Options(captureLevel: ailog.Level.trace),
+    options: const ailog.Options(captureLevel: .trace),
     sinks: [memorySink],
   );
 }
@@ -39,6 +39,7 @@ class LogConsolePage extends StatefulWidget {
 
 class _LogConsolePageState extends State<LogConsolePage> {
   String? _aiReport;
+  ailog.ReportFormat _reportFormat = .markdown;
 
   void _refresh() {
     setState(() {});
@@ -48,6 +49,19 @@ class _LogConsolePageState extends State<LogConsolePage> {
     ailog.context.setRoute('/example');
     ailog.breadcrumb('tap_manual_log');
     ailog.i('manual info log from example');
+    _refresh();
+  }
+
+  void _logWarning() {
+    ailog.breadcrumb('tap_manual_warning');
+    ailog.logger.log(
+      .warning,
+      'manual warning log from example',
+      kind: 'manual_warning',
+      probableCause: 'The example intentionally emitted a warning event.',
+      suggestedFix:
+          'Inspect the recent signals and decide if action is needed.',
+    );
     _refresh();
   }
 
@@ -88,7 +102,7 @@ class _LogConsolePageState extends State<LogConsolePage> {
   }
 
   Future<void> _copyAiReport() async {
-    final report = ailog.formatLastReport(ailog.ReportFormat.markdown);
+    final report = ailog.formatLastReport(_reportFormat);
     final text =
         report ?? 'No warning, error, or fatal event has been captured yet.';
     setState(() {
@@ -131,6 +145,10 @@ class _LogConsolePageState extends State<LogConsolePage> {
               children: [
                 FilledButton(onPressed: _logInfo, child: const Text('ailog.i')),
                 FilledButton.tonal(
+                  onPressed: _logWarning,
+                  child: const Text('warning'),
+                ),
+                FilledButton.tonal(
                   onPressed: _logPrint,
                   child: const Text('print'),
                 ),
@@ -145,6 +163,31 @@ class _LogConsolePageState extends State<LogConsolePage> {
                 OutlinedButton(
                   onPressed: _throwAsyncError,
                   child: const Text('async error'),
+                ),
+                SegmentedButton<ailog.ReportFormat>(
+                  segments: const [
+                    ButtonSegment(
+                      value: .markdown,
+                      icon: Icon(Icons.article_outlined),
+                      label: Text('Markdown'),
+                    ),
+                    ButtonSegment(
+                      value: .diagnostic,
+                      icon: Icon(Icons.terminal_outlined),
+                      label: Text('Diagnostic'),
+                    ),
+                    ButtonSegment(
+                      value: .compactJson,
+                      icon: Icon(Icons.data_object_outlined),
+                      label: Text('JSON'),
+                    ),
+                  ],
+                  selected: {_reportFormat},
+                  onSelectionChanged: (selection) {
+                    setState(() {
+                      _reportFormat = selection.single;
+                    });
+                  },
                 ),
                 OutlinedButton.icon(
                   onPressed: _copyAiReport,

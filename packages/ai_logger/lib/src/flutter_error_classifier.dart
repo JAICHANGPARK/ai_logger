@@ -162,7 +162,7 @@ core.LogEvent? logClassifiedFlutterError(
   final classification = classifyFlutterError(error);
   final frames = core.filterAppFrames(core.StackTraceParser.parse(stackTrace));
   return core.logger.log(
-    core.Level.error,
+    .error,
     classification.summary,
     error: error,
     stackTrace: stackTrace,

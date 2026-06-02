@@ -12,6 +12,13 @@ chat:
 - Rust-style diagnostics with source frames
 - `dart analyze` / `flutter analyze` output conversion
 
+Code examples use Dart dot shorthand, such as `captureLevel: .debug`, when the
+expected type is already clear. The package requires Dart `^3.12.0`.
+
+For AI agents, this repository provides a Codex skill at
+[`skills/ai-logger`](https://github.com/JAICHANGPARK/ai_logger/tree/main/skills/ai-logger)
+with integration, configuration, report, and analysis workflows.
+
 By default, warning/error/fatal events print Rust-style diagnostics as soon as
 they are captured. Markdown reports include the same diagnostic in a final
 `# Diagnostic` block. Use `Options(printReports: false)` when you only want to
@@ -33,7 +40,7 @@ void main() {
     ailog.i('server started');
     ailog.e('request failed', error: StateError('bad state'));
 
-    final report = ailog.formatLastReport(ailog.ReportFormat.markdown);
+    final report = ailog.formatLastReport(.markdown);
     print(report);
   });
 }
@@ -46,8 +53,8 @@ automatic AI-readable report.
 
 ```dart
 options: const ailog.Options(
-  captureLevel: ailog.Level.debug,
-  reportLevel: ailog.Level.warning,
+  captureLevel: .debug,
+  reportLevel: .warning,
 )
 ```
 
@@ -60,14 +67,14 @@ Print diagnostics automatically for warnings and errors:
 ```dart
 ailog.configure(
   options: const ailog.Options(
-    captureLevel: ailog.Level.debug,
-    reportLevel: ailog.Level.warning,
+    captureLevel: .debug,
+    reportLevel: .warning,
     recentSignalLevels: [
-      ailog.Level.debug,
-      ailog.Level.info,
-      ailog.Level.error,
+      .debug,
+      .info,
+      .error,
     ],
-    reportFormat: ailog.ReportFormat.diagnostic,
+    reportFormat: .diagnostic,
   ),
 );
 ```
@@ -85,8 +92,8 @@ Collect events silently and generate a copyable report later:
 ```dart
 ailog.configure(
   options: const ailog.Options(
-    captureLevel: ailog.Level.info,
-    reportLevel: ailog.Level.error,
+    captureLevel: .info,
+    reportLevel: .error,
     printReports: false,
   ),
 );
@@ -94,7 +101,7 @@ ailog.configure(
 ailog.i('loaded profile');
 ailog.e('request failed', error: StateError('bad state'));
 
-final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
+final markdown = ailog.formatLastReport(.markdown);
 ```
 
 Retrieve only the levels you want:
@@ -102,9 +109,9 @@ Retrieve only the levels you want:
 ```dart
 final selected = ailog.recentEventsWhere(
   levels: const [
-    ailog.Level.trace,
-    ailog.Level.debug,
-    ailog.Level.error,
+    .trace,
+    .debug,
+    .error,
   ],
 );
 ```

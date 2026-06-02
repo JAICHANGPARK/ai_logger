@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'level.dart';
 import 'logger.dart';
 import 'options.dart';
 import 'sinks.dart';
@@ -20,7 +19,7 @@ R guard<R>(
         body,
         (error, stackTrace) {
           activeLogger.log(
-            Level.fatal,
+            .fatal,
             error,
             error: error,
             stackTrace: stackTrace,
@@ -29,8 +28,9 @@ R guard<R>(
         },
         zoneSpecification: capturePrint
             ? ZoneSpecification(
-                print: (_, __, ___, line) {
-                  activeLogger.log(Level.info, line, source: 'print');
+                print: (_, parent, zone, line) {
+                  activeLogger.log(.info, line, source: 'print');
+                  parent.print(zone, line);
                 },
               )
             : null,

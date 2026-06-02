@@ -11,9 +11,9 @@ enum AnalysisSeverity {
 
   static AnalysisSeverity parse(String value) {
     return switch (value.toLowerCase()) {
-      'error' => AnalysisSeverity.error,
-      'warning' || 'warn' => AnalysisSeverity.warning,
-      _ => AnalysisSeverity.info,
+      'error' => .error,
+      'warning' || 'warn' => .warning,
+      _ => .info,
     };
   }
 }
@@ -99,9 +99,9 @@ class StaticAnalysisReport {
 
   String format(ReportFormat format, {SourceLoader? sourceLoader}) {
     return switch (format) {
-      ReportFormat.markdown => toMarkdown(sourceLoader: sourceLoader),
-      ReportFormat.compactJson => toCompactJsonString(),
-      ReportFormat.diagnostic => toDiagnostic(sourceLoader: sourceLoader),
+      .markdown => toMarkdown(sourceLoader: sourceLoader),
+      .compactJson => toCompactJsonString(),
+      .diagnostic => toDiagnostic(sourceLoader: sourceLoader),
     };
   }
 
@@ -113,15 +113,11 @@ class StaticAnalysisReport {
       return '# Static Analysis\nNo issues found.';
     }
 
-    final errorCount = issues
-        .where((issue) => issue.severity == AnalysisSeverity.error)
-        .length;
+    final errorCount = issues.where((issue) => issue.severity == .error).length;
     final warningCount = issues
-        .where((issue) => issue.severity == AnalysisSeverity.warning)
+        .where((issue) => issue.severity == .warning)
         .length;
-    final infoCount = issues
-        .where((issue) => issue.severity == AnalysisSeverity.info)
-        .length;
+    final infoCount = issues.where((issue) => issue.severity == .info).length;
     final buffer = StringBuffer()
       ..writeln('# Static Analysis')
       ..writeln(

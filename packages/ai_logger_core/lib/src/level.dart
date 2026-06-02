@@ -19,13 +19,13 @@ enum Level {
     }
     final text = value?.toString().toLowerCase();
     return switch (text) {
-      't' || 'trace' => Level.trace,
-      'd' || 'debug' => Level.debug,
-      'i' || 'info' => Level.info,
-      'w' || 'warning' || 'warn' => Level.warning,
-      'e' || 'error' => Level.error,
-      'f' || 'fatal' => Level.fatal,
-      _ => Level.info,
+      't' || 'trace' => .trace,
+      'd' || 'debug' => .debug,
+      'i' || 'info' => .info,
+      'w' || 'warning' || 'warn' => .warning,
+      'e' || 'error' => .error,
+      'f' || 'fatal' => .fatal,
+      _ => .info,
     };
   }
 }

@@ -2,6 +2,11 @@
 
 ## 2026.6.3
 
+- Preserved parent-zone `print()` output while still capturing guarded prints.
+- Fixed report generation when `recentSignalLimit` is zero.
+- Aligned CLI `report --last` selection with warning/error/fatal reportable
+  events.
+- Applied Dart dot shorthand syntax where the static type context is clear.
 - Bumped package version for pub.dev publishing after runtime diagnostic,
   recent signal filtering, and README metadata updates.
 

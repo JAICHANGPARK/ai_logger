@@ -2,6 +2,9 @@
 
 ## 2026.6.3
 
+- Refreshed the example app with warning events and Markdown/diagnostic/JSON
+  report format selection.
+- Applied Dart dot shorthand syntax where the static type context is clear.
 - Bumped package version for pub.dev publishing after runtime diagnostic,
   recent signal filtering, and README metadata updates.
 - Updated the `ai_logger_core` dependency constraint to `^2026.6.3`.

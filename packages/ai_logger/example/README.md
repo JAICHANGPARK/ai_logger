@@ -9,6 +9,8 @@ This app demonstrates the Flutter app-level runtime signals captured by
 - `FlutterError.reportError`
 - uncaught async errors scheduled inside the guarded app zone
 - route breadcrumbs through `AiLoggerRouteObserver`
+- manual warning events
+- copyable Markdown, diagnostic, and compact JSON AI reports
 
 Run it from this directory:
 

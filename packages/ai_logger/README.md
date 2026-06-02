@@ -7,6 +7,13 @@ into compact, structured reports that an AI can read directly or a developer
 can copy into an AI chat. It re-exports `ai_logger_core` and adds Flutter
 runtime hooks.
 
+Code examples use Dart dot shorthand, such as `captureLevel: .debug`, when the
+expected type is already clear. The package requires Dart `^3.12.0`.
+
+For AI agents, this repository provides a Codex skill at
+[`skills/ai-logger`](https://github.com/JAICHANGPARK/ai_logger/tree/main/skills/ai-logger)
+with integration, configuration, report, and analysis workflows.
+
 ## Installation
 
 ```bash
@@ -22,8 +29,8 @@ void main() {
   ailog.runApp(
     const MyApp(),
     options: const ailog.Options(
-      captureLevel: ailog.Level.debug,
-      reportLevel: ailog.Level.warning,
+      captureLevel: .debug,
+      reportLevel: .warning,
     ),
   );
 }
@@ -32,7 +39,7 @@ void main() {
 Generate a copyable AI report from the latest warning, error, or fatal event:
 
 ```dart
-final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
+final markdown = ailog.formatLastReport(.markdown);
 ```
 
 By default, warning/error/fatal runtime events print Rust-style diagnostics to
@@ -60,8 +67,8 @@ automatic AI-readable report.
 
 ```dart
 options: const ailog.Options(
-  captureLevel: ailog.Level.debug,
-  reportLevel: ailog.Level.warning,
+  captureLevel: .debug,
+  reportLevel: .warning,
 )
 ```
 
@@ -77,14 +84,14 @@ platforms:
 ailog.runApp(
   const MyApp(),
   options: const ailog.Options(
-    captureLevel: ailog.Level.debug,
-    reportLevel: ailog.Level.warning,
+    captureLevel: .debug,
+    reportLevel: .warning,
     recentSignalLevels: [
-      ailog.Level.debug,
-      ailog.Level.info,
-      ailog.Level.error,
+      .debug,
+      .info,
+      .error,
     ],
-    reportFormat: ailog.ReportFormat.diagnostic,
+    reportFormat: .diagnostic,
   ),
   sinks: [ailog.FileJsonlSink('.ai_logger/events.jsonl')],
 );
@@ -105,8 +112,8 @@ your own UI:
 ailog.runApp(
   const MyApp(),
   options: const ailog.Options(
-    captureLevel: ailog.Level.info,
-    reportLevel: ailog.Level.error,
+    captureLevel: .info,
+    reportLevel: .error,
     printReports: false,
   ),
 );
@@ -115,9 +122,9 @@ ailog.runApp(
 Then generate a report on demand:
 
 ```dart
-final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
-final json = ailog.formatLastReport(ailog.ReportFormat.compactJson);
-final diagnostic = ailog.formatLastReport(ailog.ReportFormat.diagnostic);
+final markdown = ailog.formatLastReport(.markdown);
+final json = ailog.formatLastReport(.compactJson);
+final diagnostic = ailog.formatLastReport(.diagnostic);
 ```
 
 Retrieve only the levels you want:
@@ -125,9 +132,9 @@ Retrieve only the levels you want:
 ```dart
 final selected = ailog.recentEventsWhere(
   levels: const [
-    ailog.Level.trace,
-    ailog.Level.debug,
-    ailog.Level.error,
+    .trace,
+    .debug,
+    .error,
   ],
 );
 ```
