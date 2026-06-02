@@ -2,6 +2,13 @@
 
 ## 2026-06-02
 
+### Pub.dev documentation and metadata
+
+- Expanded root and package READMEs with installation, quick start,
+  configuration, output format, and persistence guidance.
+- Added pub.dev metadata fields for package documentation, issue tracker,
+  topics, and supported platforms.
+
 ### Runtime diagnostic output
 
 - Added default Rust-style diagnostic output for warning/error/fatal runtime

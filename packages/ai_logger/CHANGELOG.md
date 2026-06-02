@@ -2,6 +2,7 @@
 
 ## 2026.6.2
 
+- Expanded pub.dev README guidance and package metadata.
 - Added default Rust-style diagnostic output for reportable Flutter runtime
   errors.
 - Added final `# Diagnostic` sections to generated Markdown reports.

@@ -1,12 +1,35 @@
 # ai_logger
 
+**AI-friendly logger for Flutter and Dart.**
+
 `ai_logger` is a Flutter-first logging monorepo for AI-assisted app
 development. It captures Flutter/Dart app-level runtime logs and errors, then
-converts them into compact reports that an AI can read directly or a developer
-can copy into an AI chat.
+converts them into compact, structured reports that an AI can read directly or
+a developer can copy into an AI chat.
+
+The goal is to turn noisy runtime output into useful debugging context:
+
+- structured log events with level, source, route, context, error, and stack
+- compact Markdown, JSON, and diagnostic reports built for AI review
+- Flutter app hooks for errors, prints, debug output, and route breadcrumbs
+- Dart-only APIs for packages, CLIs, services, and tests
 
 Dart-only projects can use `ai_logger_core`; Flutter apps use `ai_logger`,
 which re-exports the core API and installs Flutter-specific hooks.
+
+## Installation
+
+For Flutter apps:
+
+```bash
+flutter pub add ai_logger
+```
+
+For Dart-only projects:
+
+```bash
+dart pub add ai_logger_core
+```
 
 ## Packages
 
@@ -21,7 +44,9 @@ root `android/`, `ios/`, `macos/`, or other platform implementation folders
 because v1 focuses on Dart/Flutter app-level signals. The
 `packages/ai_logger/example` app includes full platform runner folders.
 
-## Flutter
+## Quick Start
+
+### Flutter
 
 ```dart
 import 'package:ai_logger/ai_logger.dart' as ailog;
@@ -54,6 +79,18 @@ Generate a copyable AI report from the most recent warning/error/fatal event:
 final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
 ```
 
+By default, warning/error/fatal runtime events also print a Rust-style
+diagnostic immediately:
+
+```text
+error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.
+ --> lib/profile_header.dart:31:12
+ help: Wrap the overflowing child with Expanded or Flexible.
+```
+
+Markdown reports include the same diagnostic in a final `# Diagnostic` block.
+Disable automatic console reports with `Options(printReports: false)`.
+
 Persist raw events as JSONL on `dart:io` platforms:
 
 ```dart
@@ -76,7 +113,7 @@ Native OS logs such as Android Logcat and iOS OSLog are not captured by this
 package. Those require a native/federated plugin and should be added as an
 optional package when that product scope is needed.
 
-## Dart
+### Dart
 
 ```dart
 import 'package:ai_logger_core/ai_logger_core.dart' as ailog;
@@ -102,6 +139,109 @@ ailog.breadcrumb('tap_login_button');
 ailog.context.setRoute('/login');
 ailog.context.set('screen_width', 390);
 ```
+
+## Configuration Examples
+
+### Print AI Diagnostics Automatically
+
+```dart
+ailog.configure(
+  options: const ailog.Options(
+    captureLevel: ailog.Level.debug,
+    reportLevel: ailog.Level.warning,
+    reportFormat: ailog.ReportFormat.diagnostic,
+  ),
+);
+```
+
+With this configuration, `ai_logger` captures `debug` and higher events, then
+prints an AI-friendly diagnostic report whenever a `warning`, `error`, or
+`fatal` event is logged. Diagnostic output is compact and terminal-friendly:
+
+```text
+error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.
+ --> lib/profile_header.dart:3:5
+ 1 | return Row(
+ 2 |   children: [
+ 3 |     Text(user.name),
+   |     ^ this child is probably unconstrained
+ 4 |     IconButton(onPressed: save),
+ 5 |   ],
+ help: wrap the wide child with Expanded or Flexible
+```
+
+### Collect First, Copy Later
+
+```dart
+ailog.configure(
+  options: const ailog.Options(
+    captureLevel: ailog.Level.info,
+    reportLevel: ailog.Level.error,
+    printReports: false,
+  ),
+);
+
+ailog.i('loaded profile');
+ailog.e('request failed', error: error, stackTrace: stackTrace);
+
+final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
+```
+
+With this configuration, events are captured but not printed automatically.
+Call `formatLastReport()` when the UI, CLI, or test wants a copyable report.
+
+## Output Formats
+
+`ReportFormat.diagnostic` is best for terminals and CI logs:
+
+```text
+error[network_error]: Request failed.
+ --> lib/api.dart:42:12
+ help: check the failing endpoint and retry policy
+```
+
+`ReportFormat.markdown` is best for pasting into an AI chat:
+
+````markdown
+# Runtime Event
+Request failed.
+
+Kind: network_error
+Location: lib/api.dart:42:12
+
+# Suggested Fix
+check the failing endpoint and retry policy
+
+# Recent Signals
+- info route=/profile loaded profile
+
+# Diagnostic
+```text
+error[network_error]: Request failed.
+ --> lib/api.dart:42:12
+ help: check the failing endpoint and retry policy
+```
+````
+
+`ReportFormat.compactJson` is best for tools:
+
+```json
+{
+  "event": {
+    "t": "2026-06-02T10:01:00.000",
+    "lv": "E",
+    "src": "app",
+    "msg": "Request failed.",
+    "kind": "network_error",
+    "file": "lib/api.dart",
+    "line": 42,
+    "col": 12
+  }
+}
+```
+
+JSONL sinks persist one compact event per line, which the CLI can later turn
+back into Markdown, diagnostics, or JSON.
 
 ## CLI
 

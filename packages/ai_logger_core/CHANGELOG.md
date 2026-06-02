@@ -2,6 +2,7 @@
 
 ## 2026.6.2
 
+- Expanded pub.dev README guidance and package metadata.
 - Added default Rust-style diagnostic output for warning/error/fatal events.
 - Added final `# Diagnostic` sections to Markdown runtime and static analysis
   reports.
