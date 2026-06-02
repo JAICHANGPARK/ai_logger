@@ -2,6 +2,19 @@
 
 ## 2026-06-02
 
+### Flutter Web runtime diagnostics
+
+- Added Flutter Web browser error hooks for `window.onerror` and
+  `unhandledrejection` through a web-only conditional import.
+- Added Web runtime error classification for network/CORS failures,
+  null/undefined JavaScript errors, JavaScript interop errors, compiled
+  `main.dart.js` stack locations, and unhandled promise rejections.
+- Added redacted Web context such as current URL, user agent, and viewport to
+  captured browser runtime errors.
+- Refreshed the example with a simulated Web runtime error button and tests for
+  diagnostic/JSON report output.
+- Bumped `ai_logger` to `2026.6.4` and the example app to `2026.6.4+3`.
+
 ### Review hardening and example refresh
 
 - Preserved parent-zone `print()` output while still capturing guarded prints as

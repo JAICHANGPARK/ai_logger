@@ -109,4 +109,29 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('shows a classified Flutter Web runtime error', (tester) async {
+    await tester.pumpWidget(const AiLoggerExampleApp());
+
+    await tester.tap(find.widgetWithText(FilledButton, 'web error'));
+    await tester.pump();
+
+    expect(memorySink.events.last.kind, 'web_network_error');
+    expect(find.textContaining('[E] Failed to fetch'), findsOneWidget);
+
+    await tester.tap(find.text('Diagnostic'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('copy AI report'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SelectableText &&
+            (widget.data?.contains('error[web_network_error]') ?? false) &&
+            (widget.data?.contains('--source-maps') ?? false),
+      ),
+      findsOneWidget,
+    );
+  });
 }

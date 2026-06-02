@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026.6.4
+
+- Added web-only browser runtime hooks for `window.onerror` and
+  `unhandledrejection`.
+- Added Flutter Web runtime error classification for network/CORS, null or
+  undefined JavaScript values, JavaScript interop, compiled `main.dart.js`
+  locations, and unhandled promise rejections.
+- Added redacted Web runtime context and refreshed the example with a Web error
+  report path.
+
 ## 2026.6.3
 
 - Refreshed the example app with warning events and Markdown/diagnostic/JSON

@@ -88,6 +88,17 @@ class _LogConsolePageState extends State<LogConsolePage> {
     _refresh();
   }
 
+  void _logWebRuntimeError() {
+    ailog.logClassifiedWebRuntimeError(
+      'Failed to fetch',
+      file: 'main.dart.js',
+      line: 123,
+      column: 45,
+      source: 'web:onerror',
+    );
+    _refresh();
+  }
+
   void _throwAsyncError() {
     Future<void>.delayed(Duration.zero, () {
       throw StateError('async failure captured by ai_logger');
@@ -159,6 +170,10 @@ class _LogConsolePageState extends State<LogConsolePage> {
                 FilledButton.tonal(
                   onPressed: _reportFlutterError,
                   child: const Text('FlutterError'),
+                ),
+                FilledButton.tonal(
+                  onPressed: _logWebRuntimeError,
+                  child: const Text('web error'),
                 ),
                 OutlinedButton(
                   onPressed: _throwAsyncError,

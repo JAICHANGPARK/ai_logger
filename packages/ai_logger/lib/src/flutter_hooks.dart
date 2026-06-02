@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' as widgets;
 
 import 'flutter_error_classifier.dart';
+import 'web_runtime_hooks_stub.dart'
+    if (dart.library.html) 'web_runtime_hooks_web.dart'
+    as web_runtime;
 
 typedef PlatformErrorHandler =
     bool Function(Object error, StackTrace stackTrace);
@@ -66,6 +69,8 @@ void installFlutterHooks({
     _previousDebugPrint?.call(message, wrapWidth: wrapWidth);
   };
 
+  web_runtime.installWebRuntimeHooks(target: core.logger);
+
   _installed = true;
 }
 
@@ -107,6 +112,7 @@ void resetFlutterHooksForTesting() {
   FlutterError.onError = _previousFlutterError;
   ui.PlatformDispatcher.instance.onError = _previousPlatformError;
   debugPrint = _previousDebugPrint ?? debugPrintThrottled;
+  web_runtime.resetWebRuntimeHooksForTesting();
   _previousFlutterError = null;
   _previousPlatformError = null;
   _previousDebugPrint = null;
