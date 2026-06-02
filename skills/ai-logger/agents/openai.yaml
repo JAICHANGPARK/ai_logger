@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Logger"
+  short_description: "Use ai_logger in Dart and Flutter apps"
+  default_prompt: "Use $ai-logger to add AI-friendly logging to this Flutter or Dart project."
