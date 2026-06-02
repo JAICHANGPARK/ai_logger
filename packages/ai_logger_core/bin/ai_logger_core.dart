@@ -12,6 +12,8 @@ void main(List<String> args) {
   switch (args.first) {
     case 'report':
       _report(args.skip(1).toList());
+    case 'analyze':
+      _analyze(args.skip(1).toList());
     case 'flutter-test':
       stdout.writeln(
         'Use the ai_logger Flutter package tests for hook and classifier checks.',
@@ -21,6 +23,73 @@ void main(List<String> args) {
       _printUsage();
       exitCode = 64;
   }
+}
+
+void _analyze(List<String> args) {
+  var format = ReportFormat.markdown;
+  var projectRoot = Directory.current.path;
+  var tool = 'dart';
+  String? inputPath;
+
+  for (var index = 0; index < args.length; index += 1) {
+    final arg = args[index];
+    switch (arg) {
+      case '--format':
+        index += 1;
+        format = ReportFormat.parse(index < args.length ? args[index] : null);
+      case '--project':
+        index += 1;
+        if (index < args.length) {
+          projectRoot = args[index];
+        }
+      case '--tool':
+        index += 1;
+        if (index < args.length) {
+          tool = args[index];
+        }
+      case '--input':
+        index += 1;
+        if (index < args.length) {
+          inputPath = args[index];
+        }
+      default:
+        stderr.writeln('Unknown option: $arg');
+        exitCode = 64;
+        return;
+    }
+  }
+
+  final output = inputPath == null
+      ? _runAnalyzer(tool: tool, projectRoot: projectRoot)
+      : File(
+          _resolvePath(inputPath, Directory.current.path),
+        ).readAsStringSync();
+  final issues = const StaticAnalysisParser().parse(output);
+  final report = StaticAnalysisReport(issues);
+  stdout.writeln(
+    report.format(
+      format,
+      sourceLoader: (path) => _loadSource(path, projectRoot),
+    ),
+  );
+}
+
+String _runAnalyzer({required String tool, required String projectRoot}) {
+  final executable = switch (tool) {
+    'flutter' => 'flutter',
+    'dart' => 'dart',
+    _ => tool,
+  };
+  final result = Process.runSync(
+    executable,
+    executable == 'flutter'
+        ? ['analyze', projectRoot]
+        : ['analyze', projectRoot],
+    workingDirectory: projectRoot,
+  );
+  final output = '${result.stdout}\n${result.stderr}'.trim();
+  exitCode = result.exitCode;
+  return output;
 }
 
 void _report(List<String> args) {
@@ -148,6 +217,8 @@ void _printUsage() {
 Usage:
   dart run ai_logger_core report --last [--format markdown|diagnostic|json]
   dart run ai_logger_core report --file .ai_logger/events.jsonl --project .
+  dart run ai_logger_core analyze --project . [--tool dart|flutter]
+  dart run ai_logger_core analyze --input analyzer.txt --format diagnostic
   dart run ai_logger_core flutter-test
 ''');
 }

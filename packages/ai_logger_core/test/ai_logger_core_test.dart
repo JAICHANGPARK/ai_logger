@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ai_logger_core/ai_logger_core.dart' as ailog;
+import 'package:logger/logger.dart' as logger_pkg;
+import 'package:logging/logging.dart' as logging_pkg;
 import 'package:test/test.dart';
 
 void main() {
@@ -134,5 +137,132 @@ return Row(
     expect(sink.events, hasLength(1));
     expect(sink.events.single.source, 'print');
     expect(sink.events.single.message, 'server started');
+  });
+
+  test('builds a last report from recent logger events', () {
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(reportLevel: ailog.Level.warning),
+    );
+
+    logger.log(ailog.Level.info, 'loaded profile');
+    logger.log(
+      ailog.Level.error,
+      'RenderFlex overflowed by 42px',
+      kind: 'render_flex_overflow',
+      file: 'lib/profile.dart',
+      line: 31,
+      probableCause: 'A Row child is wider than the available width.',
+      suggestedFix: 'Wrap it with Expanded.',
+    );
+
+    final markdown = logger.formatLastReport(ailog.ReportFormat.markdown);
+
+    expect(markdown, isNotNull);
+    expect(markdown, contains('# Runtime Event'));
+    expect(markdown, contains('Kind: render_flex_overflow'));
+    expect(markdown, contains('# Suggested Fix'));
+  });
+
+  test('persists and reads JSONL events from a file sink', () {
+    final directory = Directory.systemTemp.createTempSync('ai_logger_test_');
+    addTearDown(() {
+      if (directory.existsSync()) {
+        directory.deleteSync(recursive: true);
+      }
+    });
+    final sink = ailog.FileJsonlSink('${directory.path}/events.jsonl');
+    final logger = ailog.AiLogger(sinks: [sink]);
+
+    logger.log(ailog.Level.warning, 'warning for AI report');
+    logger.log(ailog.Level.error, 'error for AI report', kind: 'example_error');
+
+    final events = sink.readEvents();
+
+    expect(events, hasLength(2));
+    expect(events.last.kind, 'example_error');
+  });
+
+  test('captures package:logging records', () async {
+    final sink = ailog.MemorySink();
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      sinks: [sink],
+    );
+    final subscription = ailog.captureLoggingPackage(target: logger);
+    addTearDown(subscription.cancel);
+
+    logging_pkg.Logger('example.service').warning(
+      'from package logging',
+      StateError('bad state'),
+      StackTrace.current,
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    expect(sink.events, hasLength(1));
+    expect(sink.events.single.level, ailog.Level.warning);
+    expect(sink.events.single.source, 'package:logging:example.service');
+    expect(sink.events.single.error, contains('bad state'));
+  });
+
+  test('captures package:logger output', () async {
+    final sink = ailog.MemorySink();
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      sinks: [sink],
+    );
+    final packageLogger = logger_pkg.Logger(
+      output: ailog.AiLoggerOutput(target: logger),
+      printer: logger_pkg.SimplePrinter(printTime: false, colors: false),
+      level: logger_pkg.Level.trace,
+    );
+
+    packageLogger.e(
+      'from package logger',
+      error: StateError('logger error'),
+      stackTrace: StackTrace.current,
+    );
+    await packageLogger.close();
+
+    expect(sink.events, hasLength(1));
+    expect(sink.events.single.level, ailog.Level.error);
+    expect(sink.events.single.source, 'package:logger');
+    expect(sink.events.single.message, 'from package logger');
+  });
+
+  test('parses dart analyze output and renders AI-friendly diagnostics', () {
+    const analyzerOutput = '''
+Analyzing demo...
+
+  error - lib/main.dart:3:9 - Undefined name 'missingName'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+warning - lib/main.dart:2:9 - The value of the local variable 'unused' isn't used. Try removing the variable or using it. - unused_local_variable
+
+2 issues found.
+''';
+
+    final issues = const ailog.StaticAnalysisParser().parse(analyzerOutput);
+    final report = ailog.StaticAnalysisReport(issues);
+
+    expect(issues, hasLength(2));
+    expect(issues.first.severity, ailog.AnalysisSeverity.error);
+    expect(issues.first.code, 'undefined_identifier');
+    expect(issues.first.correction, startsWith('Try correcting'));
+
+    final markdown = report.toMarkdown();
+    expect(markdown, contains('# Static Analysis'));
+    expect(markdown, contains('2 total, 1 error, 1 warning, 0 info'));
+    expect(markdown, contains('Suggested fix: Try removing'));
+
+    final diagnostic = report.toDiagnostic(
+      sourceLoader: (_) => '''
+void main() {
+  final unused = 1;
+  print(missingName);
+}
+''',
+    );
+    expect(diagnostic, contains('error[undefined_identifier]'));
+    expect(diagnostic, contains('--> lib/main.dart:3:9'));
+    expect(diagnostic, contains('^ undefined_identifier'));
+    expect(diagnostic, contains('help: Try correcting'));
   });
 }

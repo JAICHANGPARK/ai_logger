@@ -2,10 +2,12 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'context.dart';
+import 'diagnostic.dart';
 import 'event.dart';
 import 'level.dart';
 import 'options.dart';
 import 'redaction.dart';
+import 'report.dart';
 import 'sinks.dart';
 import 'stack_trace_parser.dart';
 
@@ -30,6 +32,15 @@ class AiLogger {
   Options get options => _options;
 
   List<LogEvent> get recentEvents => List.unmodifiable(_recent);
+
+  LogEvent? get lastReportableEvent {
+    for (final event in _recent.toList().reversed) {
+      if (_options.reportLevel.allows(event.level)) {
+        return event;
+      }
+    }
+    return _recent.isEmpty ? null : _recent.last;
+  }
 
   void configure({Options? options, Iterable<LogSink>? sinks}) {
     if (options != null) {
@@ -103,6 +114,20 @@ class AiLogger {
 
   String exportRecentJsonLines() {
     return _recent.map((event) => jsonEncode(event.toJson())).join('\n');
+  }
+
+  AiReport? buildReport({LogEvent? event}) {
+    final target = event ?? lastReportableEvent;
+    if (target == null) {
+      return null;
+    }
+    return ReportGenerator(
+      recentSignalLimit: _options.recentSignalLimit,
+    ).build(target, _recent);
+  }
+
+  String? formatLastReport(ReportFormat format, {SourceLoader? sourceLoader}) {
+    return buildReport()?.format(format, sourceLoader: sourceLoader);
   }
 
   void _remember(LogEvent event) {
@@ -181,4 +206,12 @@ LogEvent? f(
 
 void breadcrumb(String name, {Map<String, Object?> data = const {}}) {
   context.addBreadcrumb(name, data: data);
+}
+
+AiReport? buildReport({LogEvent? event}) {
+  return logger.buildReport(event: event);
+}
+
+String? formatLastReport(ReportFormat format, {SourceLoader? sourceLoader}) {
+  return logger.formatLastReport(format, sourceLoader: sourceLoader);
 }

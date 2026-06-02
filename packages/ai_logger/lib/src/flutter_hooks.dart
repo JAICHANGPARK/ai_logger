@@ -74,8 +74,29 @@ void runApp(
   core.Options? options,
   Iterable<core.LogSink>? sinks,
 }) {
-  installFlutterHooks(options: options, sinks: sinks);
-  widgets.runApp(app);
+  runGuarded(
+    () {
+      widgets.runApp(app);
+    },
+    options: options,
+    sinks: sinks,
+  );
+}
+
+R runGuarded<R>(
+  R Function() body, {
+  core.Options? options,
+  Iterable<core.LogSink>? sinks,
+}) {
+  return core.guard<R>(
+    () {
+      installFlutterHooks(options: options, sinks: sinks);
+      return body();
+    },
+    options: options,
+    sinks: sinks,
+    target: core.logger,
+  );
 }
 
 @visibleForTesting

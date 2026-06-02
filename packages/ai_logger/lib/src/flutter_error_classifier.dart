@@ -29,11 +29,14 @@ class FlutterErrorClassification {
 FlutterErrorClassification classifyFlutterError(Object error) {
   final text = error.toString();
   final lower = text.toLowerCase();
+  final originalSummary = _firstMeaningfulLine(text);
 
   if (lower.contains('renderflex overflowed')) {
-    return const FlutterErrorClassification(
+    return FlutterErrorClassification(
       kind: 'render_flex_overflow',
-      summary: 'RenderFlex overflowed.',
+      summary: originalSummary.contains('RenderFlex overflowed')
+          ? originalSummary
+          : 'RenderFlex overflowed.',
       likelyWidget: 'Row or Column',
       probableCause:
           'A flex child is wider or taller than the available space.',
@@ -134,10 +137,21 @@ FlutterErrorClassification classifyFlutterError(Object error) {
 
   return FlutterErrorClassification(
     kind: 'flutter_error',
-    summary: text.split('\n').first,
+    summary: originalSummary,
     probableCause: 'Flutter reported a runtime error.',
     suggestedFix: 'Inspect the primary app frame and recent signals.',
   );
+}
+
+String _firstMeaningfulLine(String text) {
+  for (final rawLine in text.split('\n')) {
+    final line = rawLine.trim();
+    if (line.isEmpty || line == 'FlutterError') {
+      continue;
+    }
+    return line;
+  }
+  return text.trim().isEmpty ? 'Flutter error' : text.trim();
 }
 
 core.LogEvent? logClassifiedFlutterError(

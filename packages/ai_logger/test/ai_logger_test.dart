@@ -23,6 +23,7 @@ void main() {
     );
 
     expect(overflow.kind, 'render_flex_overflow');
+    expect(overflow.summary, contains('42 pixels'));
     expect(overflow.suggestedFix, contains('Expanded'));
     expect(setState.kind, 'set_state_after_dispose');
   });
@@ -69,5 +70,22 @@ void main() {
     expect(sink.events, hasLength(1));
     expect(sink.events.single.level, ailog.Level.debug);
     expect(sink.events.single.source, 'debugPrint');
+  });
+
+  test('runGuarded captures print logs in the app zone', () {
+    final sink = ailog.MemorySink();
+
+    ailog.runGuarded<void>(
+      () {
+        print('zone print from app');
+      },
+      options: const ailog.Options(captureLevel: ailog.Level.debug),
+      sinks: [sink],
+    );
+
+    expect(sink.events, hasLength(1));
+    expect(sink.events.single.level, ailog.Level.info);
+    expect(sink.events.single.source, 'print');
+    expect(sink.events.single.message, 'zone print from app');
   });
 }
