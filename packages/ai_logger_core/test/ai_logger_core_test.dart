@@ -10,7 +10,10 @@ void main() {
   test('captures only events at or above the configured level', () {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(captureLevel: ailog.Level.warning),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.warning,
+        printReports: false,
+      ),
       sinks: [sink],
     );
 
@@ -24,6 +27,7 @@ void main() {
   test('serializes compact JSONL fields and restores events', () {
     final sinkLines = <String>[];
     final logger = ailog.AiLogger(
+      options: const ailog.Options(printReports: false),
       sinks: [ailog.JsonlStringSink(sinkLines.add)],
     );
     logger.context.setRoute('/login');
@@ -94,6 +98,10 @@ void main() {
     expect(markdown, contains('Kind: render_flex_overflow'));
     expect(markdown, contains('# Recent Signals'));
     expect(markdown, contains('route=/profile'));
+    expect(markdown, contains('# Diagnostic'));
+    expect(markdown, contains('```text'));
+    expect(markdown, contains('error[render_flex_overflow]'));
+    expect(markdown, contains('help: Wrap the wide child'));
   });
 
   test('renders Rust-style source diagnostics when source is available', () {
@@ -126,6 +134,42 @@ return Row(
     expect(rendered, contains('help: wrap the wide child'));
   });
 
+  test('prints Rust-style reports by default for reportable events', () {
+    final reports = <String>[];
+    final logger = ailog.AiLogger(
+      options: ailog.Options(
+        captureLevel: ailog.Level.debug,
+        reportLevel: ailog.Level.warning,
+        reportWriter: reports.add,
+        reportSourceLoader: (_) => '''
+return Row(
+  children: [
+    Text(user.name),
+    IconButton(onPressed: save),
+  ],
+);''',
+      ),
+    );
+
+    logger.log(ailog.Level.info, 'loaded profile');
+    logger.log(
+      ailog.Level.error,
+      'RenderFlex overflowed by 42 pixels.',
+      kind: 'render_flex_overflow',
+      file: 'lib/profile_header.dart',
+      line: 3,
+      column: 5,
+      probableCause: 'this child is probably unconstrained',
+      suggestedFix: 'wrap the wide child with Expanded or Flexible',
+    );
+
+    expect(reports, hasLength(1));
+    expect(reports.single, contains('error[render_flex_overflow]'));
+    expect(reports.single, contains('--> lib/profile_header.dart:3:5'));
+    expect(reports.single, contains('^ this child is probably unconstrained'));
+    expect(reports.single, contains('help: wrap the wide child'));
+  });
+
   test('guard captures print output as info events', () {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(sinks: [sink]);
@@ -141,7 +185,10 @@ return Row(
 
   test('builds a last report from recent logger events', () {
     final logger = ailog.AiLogger(
-      options: const ailog.Options(reportLevel: ailog.Level.warning),
+      options: const ailog.Options(
+        reportLevel: ailog.Level.warning,
+        printReports: false,
+      ),
     );
 
     logger.log(ailog.Level.info, 'loaded profile');
@@ -171,7 +218,10 @@ return Row(
       }
     });
     final sink = ailog.FileJsonlSink('${directory.path}/events.jsonl');
-    final logger = ailog.AiLogger(sinks: [sink]);
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(printReports: false),
+      sinks: [sink],
+    );
 
     logger.log(ailog.Level.warning, 'warning for AI report');
     logger.log(ailog.Level.error, 'error for AI report', kind: 'example_error');
@@ -185,7 +235,10 @@ return Row(
   test('captures package:logging records', () async {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        printReports: false,
+      ),
       sinks: [sink],
     );
     final subscription = ailog.captureLoggingPackage(target: logger);
@@ -207,7 +260,10 @@ return Row(
   test('captures package:logger output', () async {
     final sink = ailog.MemorySink();
     final logger = ailog.AiLogger(
-      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        printReports: false,
+      ),
       sinks: [sink],
     );
     final packageLogger = logger_pkg.Logger(
@@ -247,19 +303,21 @@ warning - lib/main.dart:2:9 - The value of the local variable 'unused' isn't use
     expect(issues.first.code, 'undefined_identifier');
     expect(issues.first.correction, startsWith('Try correcting'));
 
-    final markdown = report.toMarkdown();
-    expect(markdown, contains('# Static Analysis'));
-    expect(markdown, contains('2 total, 1 error, 1 warning, 0 info'));
-    expect(markdown, contains('Suggested fix: Try removing'));
-
-    final diagnostic = report.toDiagnostic(
-      sourceLoader: (_) => '''
+    final source = '''
 void main() {
   final unused = 1;
   print(missingName);
 }
-''',
-    );
+''';
+
+    final markdown = report.toMarkdown(sourceLoader: (_) => source);
+    expect(markdown, contains('# Static Analysis'));
+    expect(markdown, contains('2 total, 1 error, 1 warning, 0 info'));
+    expect(markdown, contains('Suggested fix: Try removing'));
+    expect(markdown, contains('# Diagnostic'));
+    expect(markdown, contains('error[undefined_identifier]'));
+
+    final diagnostic = report.toDiagnostic(sourceLoader: (_) => source);
     expect(diagnostic, contains('error[undefined_identifier]'));
     expect(diagnostic, contains('--> lib/main.dart:3:9'));
     expect(diagnostic, contains('^ undefined_identifier'));

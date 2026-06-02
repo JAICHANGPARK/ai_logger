@@ -24,7 +24,10 @@ class AiReport {
   final LogEvent event;
   final List<LogEvent> recentSignals;
 
-  String toMarkdown() {
+  String toMarkdown({
+    SourceLoader? sourceLoader,
+    bool includeDiagnostic = true,
+  }) {
     final buffer = StringBuffer()
       ..writeln(
         '# ${event.source == 'flutter' ? 'Flutter Error' : 'Runtime Event'}',
@@ -77,6 +80,18 @@ class AiReport {
       }
     }
 
+    if (includeDiagnostic) {
+      final diagnostic = toDiagnostic(sourceLoader: sourceLoader);
+      if (diagnostic.isNotEmpty) {
+        buffer
+          ..writeln()
+          ..writeln('# Diagnostic')
+          ..writeln('```text')
+          ..writeln(diagnostic)
+          ..writeln('```');
+      }
+    }
+
     return buffer.toString().trimRight();
   }
 
@@ -98,7 +113,7 @@ class AiReport {
 
   String format(ReportFormat format, {SourceLoader? sourceLoader}) {
     return switch (format) {
-      ReportFormat.markdown => toMarkdown(),
+      ReportFormat.markdown => toMarkdown(sourceLoader: sourceLoader),
       ReportFormat.compactJson => toCompactJsonString(),
       ReportFormat.diagnostic => toDiagnostic(sourceLoader: sourceLoader),
     };

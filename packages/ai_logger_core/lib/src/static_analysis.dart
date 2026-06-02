@@ -99,13 +99,16 @@ class StaticAnalysisReport {
 
   String format(ReportFormat format, {SourceLoader? sourceLoader}) {
     return switch (format) {
-      ReportFormat.markdown => toMarkdown(),
+      ReportFormat.markdown => toMarkdown(sourceLoader: sourceLoader),
       ReportFormat.compactJson => toCompactJsonString(),
       ReportFormat.diagnostic => toDiagnostic(sourceLoader: sourceLoader),
     };
   }
 
-  String toMarkdown() {
+  String toMarkdown({
+    SourceLoader? sourceLoader,
+    bool includeDiagnostic = true,
+  }) {
     if (issues.isEmpty) {
       return '# Static Analysis\nNo issues found.';
     }
@@ -136,6 +139,18 @@ class StaticAnalysisReport {
         ..writeln('   Message: ${issue.message}');
       if (issue.correction case final String correction) {
         buffer.writeln('   Suggested fix: $correction');
+      }
+    }
+
+    if (includeDiagnostic) {
+      final diagnostic = toDiagnostic(sourceLoader: sourceLoader);
+      if (diagnostic.isNotEmpty) {
+        buffer
+          ..writeln()
+          ..writeln('# Diagnostic')
+          ..writeln('```text')
+          ..writeln(diagnostic)
+          ..writeln('```');
       }
     }
 

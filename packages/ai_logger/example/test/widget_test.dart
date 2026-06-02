@@ -7,7 +7,10 @@ void main() {
   setUp(() {
     memorySink.clear();
     ailog.configure(
-      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        printReports: false,
+      ),
       sinks: [memorySink],
     );
   });
@@ -29,7 +32,10 @@ void main() {
 
   testWidgets('shows captured debugPrint logs', (tester) async {
     ailog.installFlutterHooks(
-      options: const ailog.Options(captureLevel: ailog.Level.trace),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        printReports: false,
+      ),
       sinks: [memorySink],
     );
     await tester.pumpWidget(const AiLoggerExampleApp());

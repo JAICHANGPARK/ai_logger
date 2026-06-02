@@ -12,6 +12,8 @@ void main() {
   test('re-exports core API', () {
     expect(ailog.Level.error.code, 'E');
     expect(ailog.Options().reportLevel, ailog.Level.warning);
+    expect(ailog.Options().printReports, isTrue);
+    expect(ailog.Options().reportFormat, ailog.ReportFormat.diagnostic);
   });
 
   test('classifies representative Flutter errors', () {
@@ -40,7 +42,10 @@ void main() {
     };
 
     ailog.installFlutterHooks(
-      options: const ailog.Options(captureLevel: ailog.Level.debug),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.debug,
+        printReports: false,
+      ),
       sinks: [sink],
     );
     FlutterError.reportError(
@@ -62,7 +67,10 @@ void main() {
     final sink = ailog.MemorySink();
 
     ailog.installFlutterHooks(
-      options: const ailog.Options(captureLevel: ailog.Level.debug),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.debug,
+        printReports: false,
+      ),
       sinks: [sink],
     );
     debugPrint('loaded user profile');
@@ -79,7 +87,10 @@ void main() {
       () {
         print('zone print from app');
       },
-      options: const ailog.Options(captureLevel: ailog.Level.debug),
+      options: const ailog.Options(
+        captureLevel: ailog.Level.debug,
+        printReports: false,
+      ),
       sinks: [sink],
     );
 

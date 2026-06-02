@@ -2,6 +2,16 @@
 
 ## 2026-06-02
 
+### Runtime diagnostic output
+
+- Added default Rust-style diagnostic output for warning/error/fatal runtime
+  events as soon as they are captured.
+- Added final `# Diagnostic` sections to Markdown runtime and static analysis
+  reports.
+- Added `Options.printReports`, `Options.reportFormat`,
+  `Options.reportWriter`, and `Options.reportSourceLoader` for configuring
+  automatic report output.
+
 ### Version
 
 - Set `ai_logger_core` and `ai_logger` package versions to `2026.6.2`.

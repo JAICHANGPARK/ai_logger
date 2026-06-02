@@ -2,6 +2,9 @@
 
 ## 2026.6.2
 
+- Added default Rust-style diagnostic output for reportable Flutter runtime
+  errors.
+- Added final `# Diagnostic` sections to generated Markdown reports.
 - Added Flutter app-level runtime capture for direct logs, `print`,
   `debugPrint`, `FlutterError.onError`, `PlatformDispatcher.onError`, route
   breadcrumbs, and adapter logs from `ai_logger_core`.

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
@@ -109,6 +110,7 @@ class AiLogger {
     for (final sink in _sinks) {
       sink.add(event);
     }
+    _emitReport(event);
     return event;
   }
 
@@ -127,7 +129,10 @@ class AiLogger {
   }
 
   String? formatLastReport(ReportFormat format, {SourceLoader? sourceLoader}) {
-    return buildReport()?.format(format, sourceLoader: sourceLoader);
+    return buildReport()?.format(
+      format,
+      sourceLoader: sourceLoader ?? _options.reportSourceLoader,
+    );
   }
 
   void _remember(LogEvent event) {
@@ -136,6 +141,21 @@ class AiLogger {
     while (_recent.length > maxEvents) {
       _recent.removeFirst();
     }
+  }
+
+  void _emitReport(LogEvent event) {
+    if (!_options.printReports || !_options.reportLevel.allows(event.level)) {
+      return;
+    }
+    final report =
+        ReportGenerator(recentSignalLimit: _options.recentSignalLimit)
+            .build(event, _recent)
+            .format(
+              _options.reportFormat,
+              sourceLoader: _options.reportSourceLoader,
+            );
+    final writer = _options.reportWriter ?? Zone.root.print;
+    writer(report);
   }
 }
 
