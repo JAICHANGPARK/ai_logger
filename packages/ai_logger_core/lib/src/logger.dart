@@ -34,6 +34,19 @@ class AiLogger {
 
   List<LogEvent> get recentEvents => List.unmodifiable(_recent);
 
+  List<LogEvent> recentEventsWhere({Iterable<Level>? levels}) {
+    if (levels == null) {
+      return recentEvents;
+    }
+    final levelSet = levels.toSet();
+    if (levelSet.isEmpty) {
+      return const [];
+    }
+    return List.unmodifiable(
+      _recent.where((event) => levelSet.contains(event.level)),
+    );
+  }
+
   LogEvent? get lastReportableEvent {
     for (final event in _recent.toList().reversed) {
       if (_options.reportLevel.allows(event.level)) {
@@ -114,8 +127,10 @@ class AiLogger {
     return event;
   }
 
-  String exportRecentJsonLines() {
-    return _recent.map((event) => jsonEncode(event.toJson())).join('\n');
+  String exportRecentJsonLines({Iterable<Level>? levels}) {
+    return recentEventsWhere(
+      levels: levels,
+    ).map((event) => jsonEncode(event.toJson())).join('\n');
   }
 
   AiReport? buildReport({LogEvent? event}) {
@@ -125,6 +140,7 @@ class AiLogger {
     }
     return ReportGenerator(
       recentSignalLimit: _options.recentSignalLimit,
+      recentSignalLevels: _options.recentSignalLevels,
     ).build(target, _recent);
   }
 
@@ -147,13 +163,16 @@ class AiLogger {
     if (!_options.printReports || !_options.reportLevel.allows(event.level)) {
       return;
     }
-    final report =
-        ReportGenerator(recentSignalLimit: _options.recentSignalLimit)
-            .build(event, _recent)
-            .format(
-              _options.reportFormat,
-              sourceLoader: _options.reportSourceLoader,
-            );
+    final generator = ReportGenerator(
+      recentSignalLimit: _options.recentSignalLimit,
+      recentSignalLevels: _options.recentSignalLevels,
+    );
+    final report = generator
+        .build(event, _recent)
+        .format(
+          _options.reportFormat,
+          sourceLoader: _options.reportSourceLoader,
+        );
     final writer = _options.reportWriter ?? Zone.root.print;
     writer(report);
   }
@@ -165,6 +184,10 @@ LoggerContext get context => logger.context;
 
 void configure({Options? options, Iterable<LogSink>? sinks}) {
   logger.configure(options: options, sinks: sinks);
+}
+
+List<LogEvent> recentEventsWhere({Iterable<Level>? levels}) {
+  return logger.recentEventsWhere(levels: levels);
 }
 
 LogEvent? t(Object message, {String source = 'app'}) {

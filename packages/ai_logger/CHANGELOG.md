@@ -2,6 +2,8 @@
 
 ## 2026.6.2
 
+- Re-exported level-filtered recent event queries and configurable recent signal
+  levels from `ai_logger_core`.
 - Expanded pub.dev README guidance and package metadata.
 - Added default Rust-style diagnostic output for reportable Flutter runtime
   errors.

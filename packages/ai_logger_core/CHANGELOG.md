@@ -2,6 +2,8 @@
 
 ## 2026.6.2
 
+- Added `recentEventsWhere(levels: ...)` and `Options.recentSignalLevels` for
+  selecting which captured levels are queried or included as report context.
 - Expanded pub.dev README guidance and package metadata.
 - Added default Rust-style diagnostic output for warning/error/fatal events.
 - Added final `# Diagnostic` sections to Markdown runtime and static analysis

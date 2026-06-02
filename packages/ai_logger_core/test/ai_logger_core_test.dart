@@ -24,6 +24,63 @@ void main() {
     expect(sink.events.single.message, 'visible');
   });
 
+  test('returns recent events matching explicit levels', () {
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        printReports: false,
+      ),
+    );
+
+    logger.log(ailog.Level.trace, 'trace detail');
+    logger.log(ailog.Level.debug, 'debug state');
+    logger.log(ailog.Level.info, 'loaded profile');
+    logger.log(ailog.Level.error, 'request failed');
+
+    final selected = logger.recentEventsWhere(
+      levels: const [ailog.Level.trace, ailog.Level.debug, ailog.Level.error],
+    );
+    final jsonLines = logger.exportRecentJsonLines(
+      levels: const [ailog.Level.error],
+    );
+
+    expect(selected.map((event) => event.message), [
+      'trace detail',
+      'debug state',
+      'request failed',
+    ]);
+    expect(logger.recentEventsWhere(levels: const []), isEmpty);
+    expect(jsonLines, contains('"lv":"E"'));
+    expect(jsonLines, isNot(contains('"lv":"D"')));
+  });
+
+  test('uses configured recent signal levels in reports', () {
+    final logger = ailog.AiLogger(
+      options: const ailog.Options(
+        captureLevel: ailog.Level.trace,
+        reportLevel: ailog.Level.error,
+        recentSignalLevels: [
+          ailog.Level.trace,
+          ailog.Level.debug,
+          ailog.Level.error,
+        ],
+        printReports: false,
+      ),
+    );
+
+    logger.log(ailog.Level.trace, 'trace detail');
+    logger.log(ailog.Level.debug, 'debug state');
+    logger.log(ailog.Level.info, 'loaded profile');
+    logger.log(ailog.Level.error, 'request failed');
+
+    final markdown = logger.formatLastReport(ailog.ReportFormat.markdown);
+
+    expect(markdown, contains('trace detail'));
+    expect(markdown, contains('debug state'));
+    expect(markdown, isNot(contains('loaded profile')));
+    expect(markdown, contains('# Recent Signals'));
+  });
+
   test('serializes compact JSONL fields and restores events', () {
     final sinkLines = <String>[];
     final logger = ailog.AiLogger(

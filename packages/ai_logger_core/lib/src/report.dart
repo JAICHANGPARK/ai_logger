@@ -121,9 +121,10 @@ class AiReport {
 }
 
 class ReportGenerator {
-  const ReportGenerator({this.recentSignalLimit = 20});
+  const ReportGenerator({this.recentSignalLimit = 20, this.recentSignalLevels});
 
   final int recentSignalLimit;
+  final Iterable<Level>? recentSignalLevels;
 
   AiReport build(LogEvent event, Iterable<LogEvent> allEvents) {
     final recent = <LogEvent>[];
@@ -142,6 +143,10 @@ class ReportGenerator {
   }
 
   bool _isUsefulSignal(LogEvent event) {
+    final levels = recentSignalLevels;
+    if (levels != null) {
+      return levels.contains(event.level);
+    }
     if (event.level.index >= Level.warning.index) {
       return true;
     }

@@ -11,6 +11,8 @@
 
 ### Runtime diagnostic output
 
+- Added level-filtered recent event queries and configurable recent signal
+  levels for AI reports.
 - Added default Rust-style diagnostic output for warning/error/fatal runtime
   events as soon as they are captured.
 - Added final `# Diagnostic` sections to Markdown runtime and static analysis

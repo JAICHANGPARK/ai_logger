@@ -12,6 +12,7 @@ void main() {
   test('re-exports core API', () {
     expect(ailog.Level.error.code, 'E');
     expect(ailog.Options().reportLevel, ailog.Level.warning);
+    expect(ailog.Options().recentSignalLevels, isNull);
     expect(ailog.Options().printReports, isTrue);
     expect(ailog.Options().reportFormat, ailog.ReportFormat.diagnostic);
   });

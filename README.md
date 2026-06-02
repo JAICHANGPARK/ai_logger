@@ -142,6 +142,42 @@ ailog.context.set('screen_width', 390);
 
 ## Configuration Examples
 
+### How Levels Work
+
+`captureLevel` decides what gets stored. `reportLevel` decides what becomes an
+automatic AI-readable report.
+
+```dart
+options: const ailog.Options(
+  captureLevel: ailog.Level.debug,
+  reportLevel: ailog.Level.warning,
+)
+```
+
+With this setup:
+
+- `debug`, `info`, `warning`, `error`, and `fatal` events are captured.
+- `trace` events are ignored because they are below `debug`.
+- `warning`, `error`, and `fatal` events automatically print AI-readable
+  reports.
+- `debug` and `info` events are kept as context, but do not trigger reports by
+  themselves.
+
+To retrieve only specific captured levels, pass the levels you want:
+
+```dart
+final selected = ailog.recentEventsWhere(
+  levels: const [
+    ailog.Level.trace,
+    ailog.Level.debug,
+    ailog.Level.error,
+  ],
+);
+```
+
+If you want `trace` events to appear here, `captureLevel` must be
+`ailog.Level.trace`; events below `captureLevel` are never stored.
+
 ### Print AI Diagnostics Automatically
 
 ```dart
@@ -149,6 +185,11 @@ ailog.configure(
   options: const ailog.Options(
     captureLevel: ailog.Level.debug,
     reportLevel: ailog.Level.warning,
+    recentSignalLevels: [
+      ailog.Level.debug,
+      ailog.Level.info,
+      ailog.Level.error,
+    ],
     reportFormat: ailog.ReportFormat.diagnostic,
   ),
 );
@@ -156,7 +197,9 @@ ailog.configure(
 
 With this configuration, `ai_logger` captures `debug` and higher events, then
 prints an AI-friendly diagnostic report whenever a `warning`, `error`, or
-`fatal` event is logged. Diagnostic output is compact and terminal-friendly:
+`fatal` event is logged. The generated report uses only the listed
+`recentSignalLevels` as recent context. Diagnostic output is compact and
+terminal-friendly:
 
 ```text
 error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.

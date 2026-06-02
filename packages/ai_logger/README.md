@@ -55,6 +55,20 @@ Captured app-level signals:
 
 ## Configuration
 
+`captureLevel` decides what gets stored. `reportLevel` decides what becomes an
+automatic AI-readable report.
+
+```dart
+options: const ailog.Options(
+  captureLevel: ailog.Level.debug,
+  reportLevel: ailog.Level.warning,
+)
+```
+
+With this setup, `debug` and higher events are captured, but only `warning` and
+higher events automatically print reports. Captured lower-level events can still
+appear as context in the report.
+
 This setup keeps debug breadcrumbs, prints a diagnostic when warning/error/fatal
 events happen, and stores raw events for later CLI reports on `dart:io`
 platforms:
@@ -65,6 +79,11 @@ ailog.runApp(
   options: const ailog.Options(
     captureLevel: ailog.Level.debug,
     reportLevel: ailog.Level.warning,
+    recentSignalLevels: [
+      ailog.Level.debug,
+      ailog.Level.info,
+      ailog.Level.error,
+    ],
     reportFormat: ailog.ReportFormat.diagnostic,
   ),
   sinks: [ailog.FileJsonlSink('.ai_logger/events.jsonl')],
@@ -100,6 +119,21 @@ final markdown = ailog.formatLastReport(ailog.ReportFormat.markdown);
 final json = ailog.formatLastReport(ailog.ReportFormat.compactJson);
 final diagnostic = ailog.formatLastReport(ailog.ReportFormat.diagnostic);
 ```
+
+Retrieve only the levels you want:
+
+```dart
+final selected = ailog.recentEventsWhere(
+  levels: const [
+    ailog.Level.trace,
+    ailog.Level.debug,
+    ailog.Level.error,
+  ],
+);
+```
+
+If you need `trace` events, set `captureLevel: ailog.Level.trace`; ignored
+events cannot be returned later.
 
 ## Output Shapes
 
