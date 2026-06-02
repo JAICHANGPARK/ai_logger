@@ -8,6 +8,7 @@
 build/
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
+pubspec_overrides.yaml
 coverage/
 
 # Directory created by dartdoc

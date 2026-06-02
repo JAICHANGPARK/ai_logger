@@ -2,6 +2,26 @@
 
 ## 2026-06-02
 
+### Version
+
+- Set `ai_logger_core` and `ai_logger` package versions to `2026.6.2`.
+- Set the example app version to `2026.6.2+1`.
+
+### Runtime capture and AI report completion
+
+- Wrapped `ai_logger.runApp` with a guarded zone so Flutter apps capture
+  `print()` and uncaught zone errors through the normal app entrypoint.
+- Added `runGuarded`, last-report helpers, `FileJsonlSink`, and adapters for
+  `package:logging` and `package:logger`.
+- Added `dart run ai_logger_core analyze` to transform `dart analyze` or
+  `flutter analyze` output into AI-friendly Markdown, compact JSON, and
+  Rust-style diagnostics while preserving analyzer exit codes.
+- Added a full `packages/ai_logger/example` Flutter app with platform runners,
+  runtime capture buttons, captured event display, and copyable AI Markdown
+  report output.
+- Verified Markdown and diagnostic CLI output against fixture JSONL and source
+  frames.
+
 ### AI Logger PRD foundation
 
 - Added the `packages/ai_logger_core` pure Dart package with level mapping,

@@ -1,6 +1,6 @@
 name: ai_logger_core
 description: Pure Dart AI-ready logging, diagnostics, and compact report generation.
-version: 0.1.0
+version: 2026.6.2
 repository: https://github.com/JAICHANGPARK/ai_logger
 
 environment:
@@ -11,3 +11,6 @@ executables:
 
 dev_dependencies:
   test: ^1.26.0
+dependencies:
+  logger: ^2.7.0
+  logging: ^1.3.0

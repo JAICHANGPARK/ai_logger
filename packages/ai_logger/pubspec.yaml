@@ -1,6 +1,6 @@
 name: ai_logger
 description: Flutter AI-ready logging package with error hooks and diagnostics.
-version: 0.1.0
+version: 2026.6.2
 repository: https://github.com/JAICHANGPARK/ai_logger
 
 environment:
@@ -10,11 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ai_logger_core: ^0.1.0
-
-dependency_overrides:
-  ai_logger_core:
-    path: ../ai_logger_core
+  ai_logger_core: ^2026.6.2
 
 dev_dependencies:
   flutter_test:
