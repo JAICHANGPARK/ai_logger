@@ -73,6 +73,52 @@ root `android/`, `ios/`, `macos/`, or other platform implementation folders
 because v1 focuses on Dart/Flutter app-level signals. The
 `packages/ai_logger/example` app includes full platform runner folders.
 
+## Benchmark
+
+The repository includes deterministic benchmarks comparing a raw runtime-error
+paste with `ai_logger` report formats:
+
+```bash
+cd packages/ai_logger_core
+dart run benchmark/raw_vs_ai_report.dart
+uv run --with tiktoken python benchmark/openai_token_counts.py
+
+cd ../ai_logger
+flutter test benchmark/real_flutter_errors_test.dart
+
+cd ../ai_logger_core
+uv run --with tiktoken python benchmark/openai_token_counts.py \
+  --input ../../docs/benchmarks/real_flutter_errors.json \
+  --markdown-output ../../docs/benchmarks/real_flutter_openai_token_counts.md \
+  --json-output ../../docs/benchmarks/real_flutter_openai_token_counts.json
+```
+
+Current benchmark results are stored in
+[`docs/benchmarks`](docs/benchmarks/README.md). In a real Flutter widget-test
+benchmark that triggers `RenderFlex`, unbounded viewport, and parent-data
+runtime errors, `diagnostic` output reduced `o200k_base` input from 2591.0 to
+52.0 tokens on average (`-98.0%`) compared with raw
+`FlutterErrorDetails` text.
+In five curated synthetic runtime-error fixtures, `diagnostic` reduced
+`o200k_base` tokens by 59.4% (`240.8` -> `97.8`). These numbers measure prompt
+cost and field-presence coverage, not model fix accuracy. See the
+[benchmark details](docs/benchmarks/README.md) and
+[analyzer-vs-runtime evidence](docs/benchmarks/analyzer_vs_runtime.md) for the
+FAQ, fixture design, real Flutter error cases, scoring rules, tokenizer counts,
+review caveats, and limitations.
+
+## FAQ
+
+### Why not just run `dart analyze`?
+
+Run `dart analyze` or `flutter analyze` first. `ai_logger` is for the runtime
+layer those tools cannot execute: widget layout constraints, route/provider
+scope, async callbacks, platform errors, network state, and user-action-driven
+failures. The benchmark includes a Flutter file that passes `flutter analyze`
+but still produces real `RenderFlex`, viewport, and `ParentDataWidget` runtime
+errors when pumped. See the
+[analyzer-vs-runtime evidence](docs/benchmarks/analyzer_vs_runtime.md).
+
 ## Quick Start
 
 ### Flutter
@@ -97,7 +143,7 @@ void main() {
 - `print()` inside the guarded `ailog.runApp` app zone
 - `FlutterError.onError` as `error`
 - `PlatformDispatcher.onError` as `fatal`
-- `debugPrint()` as `debug`
+- `debugPrint()` as `debug`, with known Flutter diagnostics promoted to errors
 - route changes through `AiLoggerRouteObserver`
 - `package:logging` records through `captureLoggingPackage()`
 - `package:logger` records through `AiLoggerOutput`
@@ -229,6 +275,15 @@ prints an AI-friendly diagnostic report whenever a `warning`, `error`, or
 `fatal` event is logged. The generated report uses only the listed
 `recentSignalLevels` as recent context. Diagnostic output is compact and
 terminal-friendly:
+
+```text
+error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.
+ --> lib/profile_header.dart:3:5
+ help: wrap the wide child with Expanded or Flexible
+```
+
+When `Options.reportSourceLoader` is configured, or when the CLI can load source
+files from disk, diagnostics can also include a source frame:
 
 ```text
 error[render_flex_overflow]: RenderFlex overflowed by 42 pixels.

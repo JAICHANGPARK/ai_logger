@@ -1,0 +1,589 @@
+{
+  "metadata": {
+    "benchmark": "raw_vs_ai_report",
+    "generatedAt": "2026-06-02T13:38:43.298164Z",
+    "caseCount": 5,
+    "fixtureType": "curated synthetic runtime-error fixtures",
+    "notes": [
+      "Reports are equivalent AiReport objects for each raw fixture.",
+      "Structured-signal coverage measures field presence, not semantic correctness.",
+      "Use a separate model-level benchmark for fix accuracy."
+    ]
+  },
+  "summary": {
+    "caseCount": 5,
+    "averageRawTokens": 254.8,
+    "averageReportTokens": 213.0,
+    "averageTokenDeltaPercent": -16.405023547880695,
+    "averageRawActionability": 1.0,
+    "averageReportActionability": 8.0,
+    "averageRawAppFrameFocus": 0.29398989898989897,
+    "averageReportAppFrameFocus": 1.0,
+    "totalRawFrameworkMentions": 30,
+    "totalReportFrameworkMentions": 0,
+    "totalRawPrivacyLeaks": 4,
+    "totalReportPrivacyLeaks": 0
+  },
+  "cases": [
+    {
+      "name": "render_flex_overflow",
+      "raw": {
+        "characters": 1188,
+        "roughTokens": 329,
+        "stackFrameLines": 10,
+        "frameworkMentions": 8,
+        "appMentions": 3,
+        "appFrameFocus": 0.2727272727272727,
+        "actionabilityScore": 1,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": false,
+          "location": true,
+          "probableCause": false,
+          "suggestedFix": false,
+          "recentSignals": false,
+          "routeContext": false,
+          "filteredAppFrames": false,
+          "diagnosticPointer": false
+        }
+      },
+      "aiLogger": {
+        "characters": 1054,
+        "roughTokens": 241,
+        "stackFrameLines": 0,
+        "frameworkMentions": 0,
+        "appMentions": 4,
+        "appFrameFocus": 1.0,
+        "actionabilityScore": 8,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": true,
+          "location": true,
+          "probableCause": true,
+          "suggestedFix": true,
+          "recentSignals": true,
+          "routeContext": true,
+          "filteredAppFrames": true,
+          "diagnosticPointer": true
+        }
+      },
+      "aiLoggerFormats": {
+        "markdown": {
+          "characters": 1054,
+          "roughTokens": 241,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 4,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 8,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": true
+          }
+        },
+        "diagnostic": {
+          "characters": 418,
+          "roughTokens": 100,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 1,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 4,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": false,
+            "suggestedFix": true,
+            "recentSignals": false,
+            "routeContext": false,
+            "filteredAppFrames": false,
+            "diagnosticPointer": true
+          }
+        },
+        "compactJson": {
+          "characters": 1235,
+          "roughTokens": 365,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 3,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 7,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": false
+          }
+        }
+      },
+      "rawText": "══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞════════════════════════════════════\nThe following assertion was thrown during layout:\nA RenderFlex overflowed by 42 pixels on the right.\n\nThe relevant error-causing widget was:\n  Row\n  Row:file:///Users/dev/demo/lib/features/profile/profile_header.dart:31:12\n\nWhen the exception was thrown, this was the stack:\n#0      RenderFlex.performLayout (package:flutter/src/rendering/flex.dart:1250:9)\n#1      RenderObject.layout (package:flutter/src/rendering/object.dart:2762:7)\n#2      ProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)\n#3      RenderObject.layout (package:flutter/src/rendering/object.dart:2762:7)\n#4      ProfileHeader.build (package:demo/features/profile/profile_header.dart:31:12)\n#5      ProfilePage.build (package:demo/features/profile/profile_page.dart:18:9)\n#6      StatelessElement.build (package:flutter/src/widgets/framework.dart:5791:49)\n#7      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5723:15)\n#8      Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)\n#9      BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3046:19)\n",
+      "aiLoggerReport": "# Flutter Error\nRenderFlex overflowed by 42 pixels on the right.\n\nKind: render_flex_overflow\nLikely widget: Row or Column\nLocation: lib/features/profile/profile_header.dart:31:12\n\n# Probable Cause\nA flex child is wider or taller than the available space.\n\n# Suggested Fix\nWrap the wide child with Expanded/Flexible or constrain it.\n\n# App Frames\n1. lib/features/profile/profile_header.dart:31:12 ProfileHeader.build\n2. lib/features/profile/profile_page.dart:18:9 ProfilePage.build\n\n# Recent Signals\n- info route=/profile loaded profile for user id 42\n- debug route=/profile screen_width=390 avatar_loaded=true\n\n# Diagnostic\n```text\nerror[render_flex_overflow]: RenderFlex overflowed by 42 pixels on the right.\n --> lib/features/profile/profile_header.dart:31:12\n 29 | return Row(\n 30 |   children: [\n 31 |     Text(user.name),\n    |            ^ A flex child is wider or taller than the available space.\n 32 |     IconButton(onPressed: save, icon: const Icon(Icons.save)),\n 33 |   ],\n help: Wrap the wide child with Expanded/Flexible or constrain it.\n```",
+      "aiLoggerReports": {
+        "markdown": "# Flutter Error\nRenderFlex overflowed by 42 pixels on the right.\n\nKind: render_flex_overflow\nLikely widget: Row or Column\nLocation: lib/features/profile/profile_header.dart:31:12\n\n# Probable Cause\nA flex child is wider or taller than the available space.\n\n# Suggested Fix\nWrap the wide child with Expanded/Flexible or constrain it.\n\n# App Frames\n1. lib/features/profile/profile_header.dart:31:12 ProfileHeader.build\n2. lib/features/profile/profile_page.dart:18:9 ProfilePage.build\n\n# Recent Signals\n- info route=/profile loaded profile for user id 42\n- debug route=/profile screen_width=390 avatar_loaded=true\n\n# Diagnostic\n```text\nerror[render_flex_overflow]: RenderFlex overflowed by 42 pixels on the right.\n --> lib/features/profile/profile_header.dart:31:12\n 29 | return Row(\n 30 |   children: [\n 31 |     Text(user.name),\n    |            ^ A flex child is wider or taller than the available space.\n 32 |     IconButton(onPressed: save, icon: const Icon(Icons.save)),\n 33 |   ],\n help: Wrap the wide child with Expanded/Flexible or constrain it.\n```",
+        "diagnostic": "error[render_flex_overflow]: RenderFlex overflowed by 42 pixels on the right.\n --> lib/features/profile/profile_header.dart:31:12\n 29 | return Row(\n 30 |   children: [\n 31 |     Text(user.name),\n    |            ^ A flex child is wider or taller than the available space.\n 32 |     IconButton(onPressed: save, icon: const Icon(Icons.save)),\n 33 |   ],\n help: Wrap the wide child with Expanded/Flexible or constrain it.",
+        "compactJson": "{\n  \"event\": {\n    \"t\": \"2026-06-02T10:00:00.000\",\n    \"lv\": \"E\",\n    \"src\": \"flutter\",\n    \"msg\": \"RenderFlex overflowed by 42 pixels on the right.\",\n    \"kind\": \"render_flex_overflow\",\n    \"file\": \"lib/features/profile/profile_header.dart\",\n    \"line\": 31,\n    \"col\": 12,\n    \"likelyWidget\": \"Row or Column\",\n    \"probableCause\": \"A flex child is wider or taller than the available space.\",\n    \"suggestedFix\": \"Wrap the wide child with Expanded/Flexible or constrain it.\",\n    \"appFrames\": [\n      {\n        \"member\": \"ProfileHeader.build\",\n        \"uri\": \"package:demo/features/profile/profile_header.dart\",\n        \"line\": 31,\n        \"column\": 12\n      },\n      {\n        \"member\": \"ProfilePage.build\",\n        \"uri\": \"package:demo/features/profile/profile_page.dart\",\n        \"line\": 18,\n        \"column\": 9\n      }\n    ]\n  },\n  \"recentSignals\": [\n    {\n      \"t\": \"2026-06-02T09:59:58.000\",\n      \"lv\": \"I\",\n      \"src\": \"app\",\n      \"msg\": \"loaded profile for user id 42\",\n      \"ctx\": {\n        \"route\": \"/profile\"\n      }\n    },\n    {\n      \"t\": \"2026-06-02T09:59:59.000\",\n      \"lv\": \"D\",\n      \"src\": \"app\",\n      \"msg\": \"screen_width=390 avatar_loaded=true\",\n      \"ctx\": {\n        \"route\": \"/profile\"\n      }\n    }\n  ]\n}"
+      }
+    },
+    {
+      "name": "provider_not_found",
+      "raw": {
+        "characters": 1139,
+        "roughTokens": 269,
+        "stackFrameLines": 7,
+        "frameworkMentions": 6,
+        "appMentions": 2,
+        "appFrameFocus": 0.25,
+        "actionabilityScore": 1,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": false,
+          "location": true,
+          "probableCause": false,
+          "suggestedFix": false,
+          "recentSignals": false,
+          "routeContext": false,
+          "filteredAppFrames": false,
+          "diagnosticPointer": false
+        }
+      },
+      "aiLogger": {
+        "characters": 935,
+        "roughTokens": 201,
+        "stackFrameLines": 0,
+        "frameworkMentions": 0,
+        "appMentions": 3,
+        "appFrameFocus": 1.0,
+        "actionabilityScore": 8,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": true,
+          "location": true,
+          "probableCause": true,
+          "suggestedFix": true,
+          "recentSignals": true,
+          "routeContext": true,
+          "filteredAppFrames": true,
+          "diagnosticPointer": true
+        }
+      },
+      "aiLoggerFormats": {
+        "markdown": {
+          "characters": 935,
+          "roughTokens": 201,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 3,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 8,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": true
+          }
+        },
+        "diagnostic": {
+          "characters": 389,
+          "roughTokens": 89,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 1,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 4,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": false,
+            "suggestedFix": true,
+            "recentSignals": false,
+            "routeContext": false,
+            "filteredAppFrames": false,
+            "diagnosticPointer": true
+          }
+        },
+        "compactJson": {
+          "characters": 1048,
+          "roughTokens": 312,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 2,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 7,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": false
+          }
+        }
+      },
+      "rawText": "ProviderNotFoundException: Error: Could not find the correct Provider<SettingsStore> above this SettingsPage Widget\n\nThis happens because you used a BuildContext that does not include the provider\nof your choice. There are a few common scenarios:\n\n- You added a new provider in your main.dart and performed a hot-reload.\n- The provider you are trying to read is in a different route.\n- You used a BuildContext that is an ancestor of the provider.\n\nThe relevant error-causing widget was:\n  SettingsPage SettingsPage:file:///Users/dev/demo/lib/features/settings/settings_page.dart:22:18\n\n#0      Provider._inheritedElementOf (package:provider/src/provider.dart:343:7)\n#1      Provider.of (package:provider/src/provider.dart:293:30)\n#2      WatchContext.watch (package:provider/src/provider.dart:693:21)\n#3      SettingsPage.build (package:demo/features/settings/settings_page.dart:22:18)\n#4      StatelessElement.build (package:flutter/src/widgets/framework.dart:5791:49)\n#5      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5723:15)\n#6      Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)\n",
+      "aiLoggerReport": "# Flutter Error\nProvider was not found for the requested type.\n\nKind: provider_not_found\nLikely widget: Provider\nLocation: lib/features/settings/settings_page.dart:22:18\n\n# Probable Cause\nThe lookup context is outside the Provider scope.\n\n# Suggested Fix\nMove the Provider above the consumer or use the right context.\n\n# App Frames\n1. lib/features/settings/settings_page.dart:22:18 SettingsPage.build\n\n# Recent Signals\n- info route=/settings opened settings screen\n- debug route=/settings selected workspace workspace_7\n\n# Diagnostic\n```text\nerror[provider_not_found]: Provider was not found for the requested type.\n --> lib/features/settings/settings_page.dart:22:18\n 20 | return Column(\n 21 |   children: [\n 22 |     Text(context.watch<SettingsStore>().themeName),\n    |                  ^ The lookup context is outside the Provider scope.\n 23 |   ],\n 24 | );\n help: Move the Provider above the consumer or use the right context.\n```",
+      "aiLoggerReports": {
+        "markdown": "# Flutter Error\nProvider was not found for the requested type.\n\nKind: provider_not_found\nLikely widget: Provider\nLocation: lib/features/settings/settings_page.dart:22:18\n\n# Probable Cause\nThe lookup context is outside the Provider scope.\n\n# Suggested Fix\nMove the Provider above the consumer or use the right context.\n\n# App Frames\n1. lib/features/settings/settings_page.dart:22:18 SettingsPage.build\n\n# Recent Signals\n- info route=/settings opened settings screen\n- debug route=/settings selected workspace workspace_7\n\n# Diagnostic\n```text\nerror[provider_not_found]: Provider was not found for the requested type.\n --> lib/features/settings/settings_page.dart:22:18\n 20 | return Column(\n 21 |   children: [\n 22 |     Text(context.watch<SettingsStore>().themeName),\n    |                  ^ The lookup context is outside the Provider scope.\n 23 |   ],\n 24 | );\n help: Move the Provider above the consumer or use the right context.\n```",
+        "diagnostic": "error[provider_not_found]: Provider was not found for the requested type.\n --> lib/features/settings/settings_page.dart:22:18\n 20 | return Column(\n 21 |   children: [\n 22 |     Text(context.watch<SettingsStore>().themeName),\n    |                  ^ The lookup context is outside the Provider scope.\n 23 |   ],\n 24 | );\n help: Move the Provider above the consumer or use the right context.",
+        "compactJson": "{\n  \"event\": {\n    \"t\": \"2026-06-02T10:01:00.000\",\n    \"lv\": \"E\",\n    \"src\": \"flutter\",\n    \"msg\": \"Provider was not found for the requested type.\",\n    \"kind\": \"provider_not_found\",\n    \"file\": \"lib/features/settings/settings_page.dart\",\n    \"line\": 22,\n    \"col\": 18,\n    \"likelyWidget\": \"Provider\",\n    \"probableCause\": \"The lookup context is outside the Provider scope.\",\n    \"suggestedFix\": \"Move the Provider above the consumer or use the right context.\",\n    \"appFrames\": [\n      {\n        \"member\": \"SettingsPage.build\",\n        \"uri\": \"package:demo/features/settings/settings_page.dart\",\n        \"line\": 22,\n        \"column\": 18\n      }\n    ]\n  },\n  \"recentSignals\": [\n    {\n      \"t\": \"2026-06-02T10:00:58.000\",\n      \"lv\": \"I\",\n      \"src\": \"app\",\n      \"msg\": \"opened settings screen\",\n      \"ctx\": {\n        \"route\": \"/settings\"\n      }\n    },\n    {\n      \"t\": \"2026-06-02T10:00:59.000\",\n      \"lv\": \"D\",\n      \"src\": \"app\",\n      \"msg\": \"selected workspace workspace_7\",\n      \"ctx\": {\n        \"route\": \"/settings\"\n      }\n    }\n  ]\n}"
+      }
+    },
+    {
+      "name": "set_state_after_dispose",
+      "raw": {
+        "characters": 920,
+        "roughTokens": 224,
+        "stackFrameLines": 8,
+        "frameworkMentions": 7,
+        "appMentions": 1,
+        "appFrameFocus": 0.125,
+        "actionabilityScore": 1,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": false,
+          "location": true,
+          "probableCause": false,
+          "suggestedFix": false,
+          "recentSignals": false,
+          "routeContext": false,
+          "filteredAppFrames": false,
+          "diagnosticPointer": false
+        }
+      },
+      "aiLogger": {
+        "characters": 971,
+        "roughTokens": 209,
+        "stackFrameLines": 0,
+        "frameworkMentions": 0,
+        "appMentions": 3,
+        "appFrameFocus": 1.0,
+        "actionabilityScore": 8,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": true,
+          "location": true,
+          "probableCause": true,
+          "suggestedFix": true,
+          "recentSignals": true,
+          "routeContext": true,
+          "filteredAppFrames": true,
+          "diagnosticPointer": true
+        }
+      },
+      "aiLoggerFormats": {
+        "markdown": {
+          "characters": 971,
+          "roughTokens": 209,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 3,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 8,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": true
+          }
+        },
+        "diagnostic": {
+          "characters": 435,
+          "roughTokens": 96,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 1,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 4,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": false,
+            "suggestedFix": true,
+            "recentSignals": false,
+            "routeContext": false,
+            "filteredAppFrames": false,
+            "diagnosticPointer": true
+          }
+        },
+        "compactJson": {
+          "characters": 1032,
+          "roughTokens": 311,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 2,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 7,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": false
+          }
+        }
+      },
+      "rawText": "FlutterError: setState() called after dispose(): SearchPageState#43a9f(lifecycle state: defunct, not mounted)\nThis error happens if you call setState() on a State object for a widget that\nno longer appears in the widget tree.\n\nThe preferred solution is to cancel the timer or stop listening to the callback.\n\n#0      State.setState.<anonymous closure> (package:flutter/src/widgets/framework.dart:1163:9)\n#1      State.setState (package:flutter/src/widgets/framework.dart:1198:6)\n#2      SearchPageState._loadResults (package:demo/features/search/search_page.dart:57:9)\n#3      _rootRunUnary (dart:async/zone.dart:1538:47)\n#4      _CustomZone.runUnary (dart:async/zone.dart:1429:19)\n#5      Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:948:45)\n#6      Future._propagateToListeners (dart:async/future_impl.dart:977:13)\n#7      Future._completeWithValue (dart:async/future_impl.dart:720:5)\n",
+      "aiLoggerReport": "# Flutter Error\nsetState was called after dispose.\n\nKind: set_state_after_dispose\nLocation: lib/features/search/search_page.dart:57:9\n\n# Probable Cause\nAn async callback updated a widget after it was disposed.\n\n# Suggested Fix\nCancel the callback or check mounted before calling setState.\n\n# App Frames\n1. lib/features/search/search_page.dart:57:9 SearchPageState._loadResults\n\n# Recent Signals\n- info route=/search query changed to \"river\"\n- debug route=/search route changed to /home before search completed\n\n# Diagnostic\n```text\nerror[set_state_after_dispose]: setState was called after dispose.\n --> lib/features/search/search_page.dart:57:9\n 55 | final results = await repository.search(query);\n 56 | // Update the screen after the asynchronous search finishes.\n 57 | setState(() {\n    |         ^ An async callback updated a widget after it was disposed.\n 58 |   _results = results;\n 59 | });\n help: Cancel the callback or check mounted before calling setState.\n```",
+      "aiLoggerReports": {
+        "markdown": "# Flutter Error\nsetState was called after dispose.\n\nKind: set_state_after_dispose\nLocation: lib/features/search/search_page.dart:57:9\n\n# Probable Cause\nAn async callback updated a widget after it was disposed.\n\n# Suggested Fix\nCancel the callback or check mounted before calling setState.\n\n# App Frames\n1. lib/features/search/search_page.dart:57:9 SearchPageState._loadResults\n\n# Recent Signals\n- info route=/search query changed to \"river\"\n- debug route=/search route changed to /home before search completed\n\n# Diagnostic\n```text\nerror[set_state_after_dispose]: setState was called after dispose.\n --> lib/features/search/search_page.dart:57:9\n 55 | final results = await repository.search(query);\n 56 | // Update the screen after the asynchronous search finishes.\n 57 | setState(() {\n    |         ^ An async callback updated a widget after it was disposed.\n 58 |   _results = results;\n 59 | });\n help: Cancel the callback or check mounted before calling setState.\n```",
+        "diagnostic": "error[set_state_after_dispose]: setState was called after dispose.\n --> lib/features/search/search_page.dart:57:9\n 55 | final results = await repository.search(query);\n 56 | // Update the screen after the asynchronous search finishes.\n 57 | setState(() {\n    |         ^ An async callback updated a widget after it was disposed.\n 58 |   _results = results;\n 59 | });\n help: Cancel the callback or check mounted before calling setState.",
+        "compactJson": "{\n  \"event\": {\n    \"t\": \"2026-06-02T10:02:00.000\",\n    \"lv\": \"E\",\n    \"src\": \"flutter\",\n    \"msg\": \"setState was called after dispose.\",\n    \"kind\": \"set_state_after_dispose\",\n    \"file\": \"lib/features/search/search_page.dart\",\n    \"line\": 57,\n    \"col\": 9,\n    \"probableCause\": \"An async callback updated a widget after it was disposed.\",\n    \"suggestedFix\": \"Cancel the callback or check mounted before calling setState.\",\n    \"appFrames\": [\n      {\n        \"member\": \"SearchPageState._loadResults\",\n        \"uri\": \"package:demo/features/search/search_page.dart\",\n        \"line\": 57,\n        \"column\": 9\n      }\n    ]\n  },\n  \"recentSignals\": [\n    {\n      \"t\": \"2026-06-02T10:01:58.000\",\n      \"lv\": \"I\",\n      \"src\": \"app\",\n      \"msg\": \"query changed to \\\"river\\\"\",\n      \"ctx\": {\n        \"route\": \"/search\"\n      }\n    },\n    {\n      \"t\": \"2026-06-02T10:01:59.000\",\n      \"lv\": \"D\",\n      \"src\": \"app\",\n      \"msg\": \"route changed to /home before search completed\",\n      \"ctx\": {\n        \"route\": \"/search\"\n      }\n    }\n  ]\n}"
+      }
+    },
+    {
+      "name": "unbounded_viewport",
+      "raw": {
+        "characters": 1148,
+        "roughTokens": 302,
+        "stackFrameLines": 8,
+        "frameworkMentions": 7,
+        "appMentions": 2,
+        "appFrameFocus": 0.2222222222222222,
+        "actionabilityScore": 1,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": false,
+          "location": true,
+          "probableCause": false,
+          "suggestedFix": false,
+          "recentSignals": false,
+          "routeContext": false,
+          "filteredAppFrames": false,
+          "diagnosticPointer": false
+        }
+      },
+      "aiLogger": {
+        "characters": 980,
+        "roughTokens": 204,
+        "stackFrameLines": 0,
+        "frameworkMentions": 0,
+        "appMentions": 3,
+        "appFrameFocus": 1.0,
+        "actionabilityScore": 8,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": true,
+          "location": true,
+          "probableCause": true,
+          "suggestedFix": true,
+          "recentSignals": true,
+          "routeContext": true,
+          "filteredAppFrames": true,
+          "diagnosticPointer": true
+        }
+      },
+      "aiLoggerFormats": {
+        "markdown": {
+          "characters": 980,
+          "roughTokens": 204,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 3,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 8,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": true
+          }
+        },
+        "diagnostic": {
+          "characters": 426,
+          "roughTokens": 86,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 1,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 4,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": false,
+            "suggestedFix": true,
+            "recentSignals": false,
+            "routeContext": false,
+            "filteredAppFrames": false,
+            "diagnosticPointer": true
+          }
+        },
+        "compactJson": {
+          "characters": 1056,
+          "roughTokens": 318,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 2,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 7,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": false
+          }
+        }
+      },
+      "rawText": "══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞════════════════════════════════════\nThe following assertion was thrown during layout:\nVertical viewport was given unbounded height.\n\nViewports expand in the scrolling direction to fill their container. In this\ncase, a vertical viewport was given an unlimited amount of vertical space in\nwhich to expand.\n\nThe relevant error-causing widget was:\n  ListView ListView:file:///Users/dev/demo/lib/features/feed/feed_page.dart:44:7\n\n#0      RenderViewport.computeDryLayout (package:flutter/src/rendering/viewport.dart:1543:15)\n#1      RenderBox.performResize (package:flutter/src/rendering/box.dart:2870:12)\n#2      RenderObject.layout (package:flutter/src/rendering/object.dart:2741:9)\n#3      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)\n#4      RenderObject.layout (package:flutter/src/rendering/object.dart:2762:7)\n#5      FeedPage.build (package:demo/features/feed/feed_page.dart:44:7)\n#6      StatelessElement.build (package:flutter/src/widgets/framework.dart:5791:49)\n#7      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5723:15)\n",
+      "aiLoggerReport": "# Flutter Error\nVertical viewport received an unbounded height.\n\nKind: vertical_viewport_unbounded_height\nLikely widget: ListView or GridView\nLocation: lib/features/feed/feed_page.dart:44:7\n\n# Probable Cause\nA scrollable is placed in a parent that does not bound height.\n\n# Suggested Fix\nGive the scrollable a bounded height or use shrinkWrap carefully.\n\n# App Frames\n1. lib/features/feed/feed_page.dart:44:7 FeedPage.build\n\n# Recent Signals\n- info route=/feed loaded 20 feed items\n- debug route=/feed layout mode compact=false\n\n# Diagnostic\n```text\nerror[vertical_viewport_unbounded_height]: Vertical viewport received an unbounded height.\n --> lib/features/feed/feed_page.dart:44:7\n 42 | return Column(\n 43 |   children: [\n 44 |     ListView.builder(\n    |       ^ A scrollable is placed in a parent that does not bound height.\n 45 |       itemCount: items.length,\n 46 |       itemBuilder: _buildItem,\n help: Give the scrollable a bounded height or use shrinkWrap carefully.\n```",
+      "aiLoggerReports": {
+        "markdown": "# Flutter Error\nVertical viewport received an unbounded height.\n\nKind: vertical_viewport_unbounded_height\nLikely widget: ListView or GridView\nLocation: lib/features/feed/feed_page.dart:44:7\n\n# Probable Cause\nA scrollable is placed in a parent that does not bound height.\n\n# Suggested Fix\nGive the scrollable a bounded height or use shrinkWrap carefully.\n\n# App Frames\n1. lib/features/feed/feed_page.dart:44:7 FeedPage.build\n\n# Recent Signals\n- info route=/feed loaded 20 feed items\n- debug route=/feed layout mode compact=false\n\n# Diagnostic\n```text\nerror[vertical_viewport_unbounded_height]: Vertical viewport received an unbounded height.\n --> lib/features/feed/feed_page.dart:44:7\n 42 | return Column(\n 43 |   children: [\n 44 |     ListView.builder(\n    |       ^ A scrollable is placed in a parent that does not bound height.\n 45 |       itemCount: items.length,\n 46 |       itemBuilder: _buildItem,\n help: Give the scrollable a bounded height or use shrinkWrap carefully.\n```",
+        "diagnostic": "error[vertical_viewport_unbounded_height]: Vertical viewport received an unbounded height.\n --> lib/features/feed/feed_page.dart:44:7\n 42 | return Column(\n 43 |   children: [\n 44 |     ListView.builder(\n    |       ^ A scrollable is placed in a parent that does not bound height.\n 45 |       itemCount: items.length,\n 46 |       itemBuilder: _buildItem,\n help: Give the scrollable a bounded height or use shrinkWrap carefully.",
+        "compactJson": "{\n  \"event\": {\n    \"t\": \"2026-06-02T10:03:00.000\",\n    \"lv\": \"E\",\n    \"src\": \"flutter\",\n    \"msg\": \"Vertical viewport received an unbounded height.\",\n    \"kind\": \"vertical_viewport_unbounded_height\",\n    \"file\": \"lib/features/feed/feed_page.dart\",\n    \"line\": 44,\n    \"col\": 7,\n    \"likelyWidget\": \"ListView or GridView\",\n    \"probableCause\": \"A scrollable is placed in a parent that does not bound height.\",\n    \"suggestedFix\": \"Give the scrollable a bounded height or use shrinkWrap carefully.\",\n    \"appFrames\": [\n      {\n        \"member\": \"FeedPage.build\",\n        \"uri\": \"package:demo/features/feed/feed_page.dart\",\n        \"line\": 44,\n        \"column\": 7\n      }\n    ]\n  },\n  \"recentSignals\": [\n    {\n      \"t\": \"2026-06-02T10:02:58.000\",\n      \"lv\": \"I\",\n      \"src\": \"app\",\n      \"msg\": \"loaded 20 feed items\",\n      \"ctx\": {\n        \"route\": \"/feed\"\n      }\n    },\n    {\n      \"t\": \"2026-06-02T10:02:59.000\",\n      \"lv\": \"D\",\n      \"src\": \"app\",\n      \"msg\": \"layout mode compact=false\",\n      \"ctx\": {\n        \"route\": \"/feed\"\n      }\n    }\n  ]\n}"
+      }
+    },
+    {
+      "name": "network_error_with_sensitive_values",
+      "raw": {
+        "characters": 595,
+        "roughTokens": 150,
+        "stackFrameLines": 5,
+        "frameworkMentions": 2,
+        "appMentions": 3,
+        "appFrameFocus": 0.6,
+        "actionabilityScore": 1,
+        "privacyLeaks": 4,
+        "fields": {
+          "kind": false,
+          "location": true,
+          "probableCause": false,
+          "suggestedFix": false,
+          "recentSignals": false,
+          "routeContext": false,
+          "filteredAppFrames": false,
+          "diagnosticPointer": false
+        }
+      },
+      "aiLogger": {
+        "characters": 944,
+        "roughTokens": 210,
+        "stackFrameLines": 0,
+        "frameworkMentions": 0,
+        "appMentions": 4,
+        "appFrameFocus": 1.0,
+        "actionabilityScore": 8,
+        "privacyLeaks": 0,
+        "fields": {
+          "kind": true,
+          "location": true,
+          "probableCause": true,
+          "suggestedFix": true,
+          "recentSignals": true,
+          "routeContext": true,
+          "filteredAppFrames": true,
+          "diagnosticPointer": true
+        }
+      },
+      "aiLoggerFormats": {
+        "markdown": {
+          "characters": 944,
+          "roughTokens": 210,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 4,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 8,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": true
+          }
+        },
+        "diagnostic": {
+          "characters": 361,
+          "roughTokens": 79,
+          "stackFrameLines": 0,
+          "frameworkMentions": 0,
+          "appMentions": 1,
+          "appFrameFocus": 1.0,
+          "actionabilityScore": 4,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": false,
+            "suggestedFix": true,
+            "recentSignals": false,
+            "routeContext": false,
+            "filteredAppFrames": false,
+            "diagnosticPointer": true
+          }
+        },
+        "compactJson": {
+          "characters": 2434,
+          "roughTokens": 688,
+          "stackFrameLines": 0,
+          "frameworkMentions": 1,
+          "appMentions": 4,
+          "appFrameFocus": 0.8,
+          "actionabilityScore": 7,
+          "privacyLeaks": 0,
+          "fields": {
+            "kind": true,
+            "location": true,
+            "probableCause": true,
+            "suggestedFix": true,
+            "recentSignals": true,
+            "routeContext": true,
+            "filteredAppFrames": true,
+            "diagnosticPointer": false
+          }
+        }
+      },
+      "rawText": "Unhandled exception:\nStateError: request failed for email=dev@example.com token=abc123\nGET https://api.example.test/profile?email=dev@example.com\nAuthorization: Bearer sk-demo-secret-123\n#0      ApiClient.fetchProfile (package:demo/api/client.dart:48:18)\n#1      ProfileRepository.load (package:demo/features/profile/repository.dart:19:12)\n#2      ProfileController.refresh (package:demo/features/profile/controller.dart:33:7)\n#3      Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:948:45)\n#4      Future._propagateToListeners (dart:async/future_impl.dart:977:13)\n",
+      "aiLoggerReport": "# Runtime Event\nRequest failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\n\nKind: network_error\nLocation: lib/api/client.dart:48:18\n\n# Probable Cause\nThe profile request failed before a response was parsed.\n\n# Suggested Fix\nCheck the endpoint, authentication state, and retry policy.\n\n# App Frames\n1. lib/api/client.dart:48:18 ApiClient.fetchProfile\n2. lib/features/profile/repository.dart:19:12 ProfileRepository.load\n\n# Recent Signals\n- info route=/profile loaded cached profile for [REDACTED_EMAIL]\n- debug route=/profile GET /profile [REDACTED_SECRET]\n\n# Diagnostic\n```text\nerror[network_error]: Request failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\n --> lib/api/client.dart:48:18\n 46 | final response = await client.get(\n 47 |   profileUri,\n 48 |   headers: authHeaders,\n    |                  ^ The profile request failed before a response was parsed.\n 49 | );\n help: Check the endpoint, authentication state, and retry policy.\n```",
+      "aiLoggerReports": {
+        "markdown": "# Runtime Event\nRequest failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\n\nKind: network_error\nLocation: lib/api/client.dart:48:18\n\n# Probable Cause\nThe profile request failed before a response was parsed.\n\n# Suggested Fix\nCheck the endpoint, authentication state, and retry policy.\n\n# App Frames\n1. lib/api/client.dart:48:18 ApiClient.fetchProfile\n2. lib/features/profile/repository.dart:19:12 ProfileRepository.load\n\n# Recent Signals\n- info route=/profile loaded cached profile for [REDACTED_EMAIL]\n- debug route=/profile GET /profile [REDACTED_SECRET]\n\n# Diagnostic\n```text\nerror[network_error]: Request failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\n --> lib/api/client.dart:48:18\n 46 | final response = await client.get(\n 47 |   profileUri,\n 48 |   headers: authHeaders,\n    |                  ^ The profile request failed before a response was parsed.\n 49 | );\n help: Check the endpoint, authentication state, and retry policy.\n```",
+        "diagnostic": "error[network_error]: Request failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\n --> lib/api/client.dart:48:18\n 46 | final response = await client.get(\n 47 |   profileUri,\n 48 |   headers: authHeaders,\n    |                  ^ The profile request failed before a response was parsed.\n 49 | );\n help: Check the endpoint, authentication state, and retry policy.",
+        "compactJson": "{\n  \"event\": {\n    \"t\": \"2026-06-02T22:38:43.272653\",\n    \"lv\": \"E\",\n    \"src\": \"app\",\n    \"msg\": \"Request failed for email=[REDACTED_EMAIL] [REDACTED_SECRET]\",\n    \"kind\": \"network_error\",\n    \"error\": \"Bad state: Authorization: Bearer [REDACTED]\",\n    \"stack\": \"#0      ApiClient.fetchProfile (package:demo/api/client.dart:48:18)\\n#1      ProfileRepository.load (package:demo/features/profile/repository.dart:19:12)\\n#2      ProfileController.refresh (package:demo/features/profile/controller.dart:33:7)\\n#3      Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:948:45)\\n#4      Future._propagateToListeners (dart:async/future_impl.dart:977:13)\\n\",\n    \"file\": \"lib/api/client.dart\",\n    \"line\": 48,\n    \"col\": 18,\n    \"member\": \"ApiClient.fetchProfile\",\n    \"probableCause\": \"The profile request failed before a response was parsed.\",\n    \"suggestedFix\": \"Check the endpoint, authentication state, and retry policy.\",\n    \"ctx\": {\n      \"route\": \"/profile\",\n      \"account_email\": \"[REDACTED_EMAIL]\"\n    },\n    \"breadcrumbs\": [\n      {\n        \"name\": \"route\",\n        \"t\": \"2026-06-02T22:38:43.267096\",\n        \"data\": {\n          \"route\": \"/profile\"\n        }\n      }\n    ],\n    \"appFrames\": [\n      {\n        \"member\": \"ApiClient.fetchProfile\",\n        \"uri\": \"package:demo/api/client.dart\",\n        \"line\": 48,\n        \"column\": 18\n      },\n      {\n        \"member\": \"ProfileRepository.load\",\n        \"uri\": \"package:demo/features/profile/repository.dart\",\n        \"line\": 19,\n        \"column\": 12\n      }\n    ]\n  },\n  \"recentSignals\": [\n    {\n      \"t\": \"2026-06-02T22:38:43.268282\",\n      \"lv\": \"I\",\n      \"src\": \"app\",\n      \"msg\": \"loaded cached profile for [REDACTED_EMAIL]\",\n      \"ctx\": {\n        \"route\": \"/profile\",\n        \"account_email\": \"[REDACTED_EMAIL]\"\n      },\n      \"breadcrumbs\": [\n        {\n          \"name\": \"route\",\n          \"t\": \"2026-06-02T22:38:43.267096\",\n          \"data\": {\n            \"route\": \"/profile\"\n          }\n        }\n      ]\n    },\n    {\n      \"t\": \"2026-06-02T22:38:43.272299\",\n      \"lv\": \"D\",\n      \"src\": \"app\",\n      \"msg\": \"GET /profile [REDACTED_SECRET]\",\n      \"ctx\": {\n        \"route\": \"/profile\",\n        \"account_email\": \"[REDACTED_EMAIL]\"\n      },\n      \"breadcrumbs\": [\n        {\n          \"name\": \"route\",\n          \"t\": \"2026-06-02T22:38:43.267096\",\n          \"data\": {\n            \"route\": \"/profile\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+      }
+    }
+  ]
+}

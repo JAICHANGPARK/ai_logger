@@ -64,7 +64,11 @@ void installFlutterHooks({
   _previousDebugPrint = debugPrint;
   debugPrint = (message, {wrapWidth}) {
     if (message != null) {
-      core.logger.log(.debug, message, source: 'debugPrint');
+      if (_looksLikeFlutterDiagnostic(message)) {
+        logClassifiedFlutterError(FlutterError(message), source: 'debugPrint');
+      } else {
+        core.logger.log(.debug, message, source: 'debugPrint');
+      }
     }
     _previousDebugPrint?.call(message, wrapWidth: wrapWidth);
   };
@@ -117,4 +121,12 @@ void resetFlutterHooksForTesting() {
   _previousPlatformError = null;
   _previousDebugPrint = null;
   _installed = false;
+}
+
+bool _looksLikeFlutterDiagnostic(String message) {
+  final lower = message.toLowerCase();
+  return lower.contains('renderflex overflowed') ||
+      lower.contains('vertical viewport was given unbounded height') ||
+      lower.contains('incorrect use of parentdatawidget') ||
+      lower.contains('renderbox was not laid out');
 }

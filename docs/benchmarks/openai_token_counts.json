@@ -1,0 +1,329 @@
+{
+  "metadata": {
+    "benchmark": "openai_token_counts",
+    "generatedAt": "2026-06-02T13:38:47.317599+00:00",
+    "fixtureType": "curated synthetic runtime-error fixtures",
+    "inputSha256": "be0b9c1df246848c91e1e615f134dbc34a3acf5955eeb7770f7019db86fc9765",
+    "pythonVersion": "3.12.12",
+    "tiktokenVersion": "0.13.0",
+    "notes": [
+      "Counts use tiktoken encodings for raw/report text only.",
+      "Chat message wrapper overhead and model output tokens are not included."
+    ]
+  },
+  "input": "../../docs/benchmarks/raw_vs_ai_report.json",
+  "encodings": {
+    "o200k_base": {
+      "summary": {
+        "markdown": {
+          "caseCount": 5,
+          "totalRawTokens": 1204,
+          "totalReportTokens": 1158,
+          "totalDeltaTokens": -46,
+          "averageRawTokens": 240.8,
+          "averageReportTokens": 231.6,
+          "medianRawTokens": 258,
+          "medianReportTokens": 235,
+          "minRawTokens": 148,
+          "maxRawTokens": 286,
+          "minReportTokens": 209,
+          "maxReportTokens": 257,
+          "deltaPercent": -3.820598006644518
+        },
+        "diagnostic": {
+          "caseCount": 5,
+          "totalRawTokens": 1204,
+          "totalReportTokens": 489,
+          "totalDeltaTokens": -715,
+          "averageRawTokens": 240.8,
+          "averageReportTokens": 97.8,
+          "medianRawTokens": 258,
+          "medianReportTokens": 99,
+          "minRawTokens": 148,
+          "maxRawTokens": 286,
+          "minReportTokens": 90,
+          "maxReportTokens": 106,
+          "deltaPercent": -59.38538205980066
+        },
+        "compactJson": {
+          "caseCount": 5,
+          "totalRawTokens": 1204,
+          "totalReportTokens": 2056,
+          "totalDeltaTokens": 852,
+          "averageRawTokens": 240.8,
+          "averageReportTokens": 411.2,
+          "medianRawTokens": 258,
+          "medianReportTokens": 329,
+          "minRawTokens": 148,
+          "maxRawTokens": 286,
+          "minReportTokens": 316,
+          "maxReportTokens": 720,
+          "deltaPercent": 70.7641196013289
+        }
+      },
+      "cases": [
+        {
+          "name": "render_flex_overflow",
+          "rawTokens": 286,
+          "reports": {
+            "markdown": {
+              "tokens": 257,
+              "deltaTokens": -29,
+              "deltaPercent": -10.13986013986014
+            },
+            "diagnostic": {
+              "tokens": 106,
+              "deltaTokens": -180,
+              "deltaPercent": -62.93706293706294
+            },
+            "compactJson": {
+              "tokens": 373,
+              "deltaTokens": 87,
+              "deltaPercent": 30.419580419580424
+            }
+          }
+        },
+        {
+          "name": "provider_not_found",
+          "rawTokens": 258,
+          "reports": {
+            "markdown": {
+              "tokens": 209,
+              "deltaTokens": -49,
+              "deltaPercent": -18.992248062015506
+            },
+            "diagnostic": {
+              "tokens": 90,
+              "deltaTokens": -168,
+              "deltaPercent": -65.11627906976744
+            },
+            "compactJson": {
+              "tokens": 316,
+              "deltaTokens": 58,
+              "deltaPercent": 22.48062015503876
+            }
+          }
+        },
+        {
+          "name": "set_state_after_dispose",
+          "rawTokens": 243,
+          "reports": {
+            "markdown": {
+              "tokens": 221,
+              "deltaTokens": -22,
+              "deltaPercent": -9.053497942386832
+            },
+            "diagnostic": {
+              "tokens": 99,
+              "deltaTokens": -144,
+              "deltaPercent": -59.25925925925925
+            },
+            "compactJson": {
+              "tokens": 318,
+              "deltaTokens": 75,
+              "deltaPercent": 30.864197530864196
+            }
+          }
+        },
+        {
+          "name": "unbounded_viewport",
+          "rawTokens": 269,
+          "reports": {
+            "markdown": {
+              "tokens": 236,
+              "deltaTokens": -33,
+              "deltaPercent": -12.267657992565056
+            },
+            "diagnostic": {
+              "tokens": 104,
+              "deltaTokens": -165,
+              "deltaPercent": -61.33828996282528
+            },
+            "compactJson": {
+              "tokens": 329,
+              "deltaTokens": 60,
+              "deltaPercent": 22.304832713754646
+            }
+          }
+        },
+        {
+          "name": "network_error_with_sensitive_values",
+          "rawTokens": 148,
+          "reports": {
+            "markdown": {
+              "tokens": 235,
+              "deltaTokens": 87,
+              "deltaPercent": 58.78378378378378
+            },
+            "diagnostic": {
+              "tokens": 90,
+              "deltaTokens": -58,
+              "deltaPercent": -39.189189189189186
+            },
+            "compactJson": {
+              "tokens": 720,
+              "deltaTokens": 572,
+              "deltaPercent": 386.4864864864865
+            }
+          }
+        }
+      ]
+    },
+    "cl100k_base": {
+      "summary": {
+        "markdown": {
+          "caseCount": 5,
+          "totalRawTokens": 1212,
+          "totalReportTokens": 1149,
+          "totalDeltaTokens": -63,
+          "averageRawTokens": 242.4,
+          "averageReportTokens": 229.8,
+          "medianRawTokens": 257,
+          "medianReportTokens": 232,
+          "minRawTokens": 145,
+          "maxRawTokens": 298,
+          "minReportTokens": 210,
+          "maxReportTokens": 255,
+          "deltaPercent": -5.198019801980198
+        },
+        "diagnostic": {
+          "caseCount": 5,
+          "totalRawTokens": 1212,
+          "totalReportTokens": 481,
+          "totalDeltaTokens": -731,
+          "averageRawTokens": 242.4,
+          "averageReportTokens": 96.2,
+          "medianRawTokens": 257,
+          "medianReportTokens": 96,
+          "minRawTokens": 145,
+          "maxRawTokens": 298,
+          "minReportTokens": 90,
+          "maxReportTokens": 104,
+          "deltaPercent": -60.31353135313532
+        },
+        "compactJson": {
+          "caseCount": 5,
+          "totalRawTokens": 1212,
+          "totalReportTokens": 2044,
+          "totalDeltaTokens": 832,
+          "averageRawTokens": 242.4,
+          "averageReportTokens": 408.8,
+          "medianRawTokens": 257,
+          "medianReportTokens": 327,
+          "minRawTokens": 145,
+          "maxRawTokens": 298,
+          "minReportTokens": 315,
+          "maxReportTokens": 714,
+          "deltaPercent": 68.64686468646865
+        }
+      },
+      "cases": [
+        {
+          "name": "render_flex_overflow",
+          "rawTokens": 298,
+          "reports": {
+            "markdown": {
+              "tokens": 255,
+              "deltaTokens": -43,
+              "deltaPercent": -14.429530201342283
+            },
+            "diagnostic": {
+              "tokens": 104,
+              "deltaTokens": -194,
+              "deltaPercent": -65.1006711409396
+            },
+            "compactJson": {
+              "tokens": 372,
+              "deltaTokens": 74,
+              "deltaPercent": 24.832214765100673
+            }
+          }
+        },
+        {
+          "name": "provider_not_found",
+          "rawTokens": 257,
+          "reports": {
+            "markdown": {
+              "tokens": 210,
+              "deltaTokens": -47,
+              "deltaPercent": -18.28793774319066
+            },
+            "diagnostic": {
+              "tokens": 90,
+              "deltaTokens": -167,
+              "deltaPercent": -64.98054474708171
+            },
+            "compactJson": {
+              "tokens": 316,
+              "deltaTokens": 59,
+              "deltaPercent": 22.957198443579767
+            }
+          }
+        },
+        {
+          "name": "set_state_after_dispose",
+          "rawTokens": 233,
+          "reports": {
+            "markdown": {
+              "tokens": 217,
+              "deltaTokens": -16,
+              "deltaPercent": -6.866952789699571
+            },
+            "diagnostic": {
+              "tokens": 96,
+              "deltaTokens": -137,
+              "deltaPercent": -58.798283261802574
+            },
+            "compactJson": {
+              "tokens": 315,
+              "deltaTokens": 82,
+              "deltaPercent": 35.1931330472103
+            }
+          }
+        },
+        {
+          "name": "unbounded_viewport",
+          "rawTokens": 279,
+          "reports": {
+            "markdown": {
+              "tokens": 232,
+              "deltaTokens": -47,
+              "deltaPercent": -16.845878136200717
+            },
+            "diagnostic": {
+              "tokens": 101,
+              "deltaTokens": -178,
+              "deltaPercent": -63.799283154121866
+            },
+            "compactJson": {
+              "tokens": 327,
+              "deltaTokens": 48,
+              "deltaPercent": 17.20430107526882
+            }
+          }
+        },
+        {
+          "name": "network_error_with_sensitive_values",
+          "rawTokens": 145,
+          "reports": {
+            "markdown": {
+              "tokens": 235,
+              "deltaTokens": 90,
+              "deltaPercent": 62.06896551724138
+            },
+            "diagnostic": {
+              "tokens": 90,
+              "deltaTokens": -55,
+              "deltaPercent": -37.93103448275862
+            },
+            "compactJson": {
+              "tokens": 714,
+              "deltaTokens": 569,
+              "deltaPercent": 392.41379310344826
+            }
+          }
+        }
+      ]
+    }
+  }
+}

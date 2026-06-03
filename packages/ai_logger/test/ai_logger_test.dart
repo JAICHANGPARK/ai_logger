@@ -117,6 +117,21 @@ void main() {
     expect(sink.events.single.source, 'debugPrint');
   });
 
+  test('debugPrint hook classifies Flutter diagnostics', () {
+    final sink = ailog.MemorySink();
+
+    ailog.installFlutterHooks(
+      options: const ailog.Options(captureLevel: .debug, printReports: false),
+      sinks: [sink],
+    );
+    debugPrint('RenderFlex overflowed by 42 pixels on the right.');
+
+    expect(sink.events, hasLength(1));
+    expect(sink.events.single.level, ailog.Level.error);
+    expect(sink.events.single.source, 'debugPrint');
+    expect(sink.events.single.kind, 'render_flex_overflow');
+  });
+
   test('runGuarded captures print logs in the app zone', () {
     final sink = ailog.MemorySink();
 

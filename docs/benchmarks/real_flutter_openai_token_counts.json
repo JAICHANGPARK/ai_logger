@@ -1,0 +1,245 @@
+{
+  "metadata": {
+    "benchmark": "openai_token_counts",
+    "generatedAt": "2026-06-02T13:37:57.287114+00:00",
+    "fixtureType": "real Flutter widget-test runtime errors",
+    "inputSha256": "10dbc6b5ee3db77a5ed6df23846fe92375f43c453e55e3fdfcfbc606b7995a7c",
+    "pythonVersion": "3.12.12",
+    "tiktokenVersion": "0.13.0",
+    "notes": [
+      "Counts use tiktoken encodings for raw/report text only.",
+      "Chat message wrapper overhead and model output tokens are not included."
+    ]
+  },
+  "input": "../../docs/benchmarks/real_flutter_errors.json",
+  "encodings": {
+    "o200k_base": {
+      "summary": {
+        "markdown": {
+          "caseCount": 3,
+          "totalRawTokens": 7773,
+          "totalReportTokens": 889,
+          "totalDeltaTokens": -6884,
+          "averageRawTokens": 2591.0,
+          "averageReportTokens": 296.3333333333333,
+          "medianRawTokens": 2834,
+          "medianReportTokens": 278,
+          "minRawTokens": 558,
+          "maxRawTokens": 4381,
+          "minReportTokens": 126,
+          "maxReportTokens": 485,
+          "deltaPercent": -88.5629743985591
+        },
+        "diagnostic": {
+          "caseCount": 3,
+          "totalRawTokens": 7773,
+          "totalReportTokens": 156,
+          "totalDeltaTokens": -7617,
+          "averageRawTokens": 2591.0,
+          "averageReportTokens": 52.0,
+          "medianRawTokens": 2834,
+          "medianReportTokens": 58,
+          "minRawTokens": 558,
+          "maxRawTokens": 4381,
+          "minReportTokens": 35,
+          "maxReportTokens": 63,
+          "deltaPercent": -97.99305287533771
+        },
+        "compactJson": {
+          "caseCount": 3,
+          "totalRawTokens": 7773,
+          "totalReportTokens": 26110,
+          "totalDeltaTokens": 18337,
+          "averageRawTokens": 2591.0,
+          "averageReportTokens": 8703.333333333334,
+          "medianRawTokens": 2834,
+          "medianReportTokens": 3094,
+          "minRawTokens": 558,
+          "maxRawTokens": 4381,
+          "minReportTokens": 356,
+          "maxReportTokens": 22660,
+          "deltaPercent": 235.90634246751577
+        }
+      },
+      "cases": [
+        {
+          "name": "real_render_flex_overflow",
+          "rawTokens": 558,
+          "reports": {
+            "markdown": {
+              "tokens": 126,
+              "deltaTokens": -432,
+              "deltaPercent": -77.41935483870968
+            },
+            "diagnostic": {
+              "tokens": 35,
+              "deltaTokens": -523,
+              "deltaPercent": -93.72759856630825
+            },
+            "compactJson": {
+              "tokens": 356,
+              "deltaTokens": -202,
+              "deltaPercent": -36.200716845878134
+            }
+          }
+        },
+        {
+          "name": "real_vertical_viewport_unbounded_height",
+          "rawTokens": 2834,
+          "reports": {
+            "markdown": {
+              "tokens": 485,
+              "deltaTokens": -2349,
+              "deltaPercent": -82.8863796753705
+            },
+            "diagnostic": {
+              "tokens": 63,
+              "deltaTokens": -2771,
+              "deltaPercent": -97.77699364855327
+            },
+            "compactJson": {
+              "tokens": 22660,
+              "deltaTokens": 19826,
+              "deltaPercent": 699.5765702187721
+            }
+          }
+        },
+        {
+          "name": "real_incorrect_parent_data_widget",
+          "rawTokens": 4381,
+          "reports": {
+            "markdown": {
+              "tokens": 278,
+              "deltaTokens": -4103,
+              "deltaPercent": -93.6544167998174
+            },
+            "diagnostic": {
+              "tokens": 58,
+              "deltaTokens": -4323,
+              "deltaPercent": -98.6761013467245
+            },
+            "compactJson": {
+              "tokens": 3094,
+              "deltaTokens": -1287,
+              "deltaPercent": -29.376854599406528
+            }
+          }
+        }
+      ]
+    },
+    "cl100k_base": {
+      "summary": {
+        "markdown": {
+          "caseCount": 3,
+          "totalRawTokens": 7868,
+          "totalReportTokens": 887,
+          "totalDeltaTokens": -6981,
+          "averageRawTokens": 2622.6666666666665,
+          "averageReportTokens": 295.6666666666667,
+          "medianRawTokens": 2855,
+          "medianReportTokens": 279,
+          "minRawTokens": 582,
+          "maxRawTokens": 4431,
+          "minReportTokens": 125,
+          "maxReportTokens": 483,
+          "deltaPercent": -88.72648703609558
+        },
+        "diagnostic": {
+          "caseCount": 3,
+          "totalRawTokens": 7868,
+          "totalReportTokens": 155,
+          "totalDeltaTokens": -7713,
+          "averageRawTokens": 2622.6666666666665,
+          "averageReportTokens": 51.666666666666664,
+          "medianRawTokens": 2855,
+          "medianReportTokens": 58,
+          "minRawTokens": 582,
+          "maxRawTokens": 4431,
+          "minReportTokens": 34,
+          "maxReportTokens": 63,
+          "deltaPercent": -98.02999491611591
+        },
+        "compactJson": {
+          "caseCount": 3,
+          "totalRawTokens": 7868,
+          "totalReportTokens": 26038,
+          "totalDeltaTokens": 18170,
+          "averageRawTokens": 2622.6666666666665,
+          "averageReportTokens": 8679.333333333334,
+          "medianRawTokens": 2855,
+          "medianReportTokens": 3100,
+          "minRawTokens": 582,
+          "maxRawTokens": 4431,
+          "minReportTokens": 355,
+          "maxReportTokens": 22583,
+          "deltaPercent": 230.93543467208946
+        }
+      },
+      "cases": [
+        {
+          "name": "real_render_flex_overflow",
+          "rawTokens": 582,
+          "reports": {
+            "markdown": {
+              "tokens": 125,
+              "deltaTokens": -457,
+              "deltaPercent": -78.52233676975945
+            },
+            "diagnostic": {
+              "tokens": 34,
+              "deltaTokens": -548,
+              "deltaPercent": -94.15807560137456
+            },
+            "compactJson": {
+              "tokens": 355,
+              "deltaTokens": -227,
+              "deltaPercent": -39.00343642611684
+            }
+          }
+        },
+        {
+          "name": "real_vertical_viewport_unbounded_height",
+          "rawTokens": 2855,
+          "reports": {
+            "markdown": {
+              "tokens": 483,
+              "deltaTokens": -2372,
+              "deltaPercent": -83.08231173380035
+            },
+            "diagnostic": {
+              "tokens": 63,
+              "deltaTokens": -2792,
+              "deltaPercent": -97.79334500875657
+            },
+            "compactJson": {
+              "tokens": 22583,
+              "deltaTokens": 19728,
+              "deltaPercent": 690.9982486865149
+            }
+          }
+        },
+        {
+          "name": "real_incorrect_parent_data_widget",
+          "rawTokens": 4431,
+          "reports": {
+            "markdown": {
+              "tokens": 279,
+              "deltaTokens": -4152,
+              "deltaPercent": -93.7034529451591
+            },
+            "diagnostic": {
+              "tokens": 58,
+              "deltaTokens": -4373,
+              "deltaPercent": -98.69104039720153
+            },
+            "compactJson": {
+              "tokens": 3100,
+              "deltaTokens": -1331,
+              "deltaPercent": -30.0383660573234
+            }
+          }
+        }
+      ]
+    }
+  }
+}
